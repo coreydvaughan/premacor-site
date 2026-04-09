@@ -1,27 +1,97 @@
-<section class="section solution">
+<section class="section section-band section-band--light solution">
   <div class="container">
-    <div class="solution-content">
-      <h2>Built for Production, Not Prototyping</h2>
+    <div class="section-split section-split--media-left">
+      <div class="section-split__text section-accent">
+        <div class="solution-content">
+          <p class="solution-eyebrow">How Premacor fits</p>
+          <h2>Forty years of discipline, built for global production</h2>
 
-      <p>
-        Premacor focuses on turning proven designs into stable, repeatable production.
-        Our approach emphasizes process control, consistency, and long-run reliability—ensuring
-        every part meets specification across every run.
-      </p>
+          <p>
+            Premacor turns proven part designs into <strong>stable, repeatable manufacturing</strong>.
+            With <strong>40+ years</strong> of precision-machining experience and leadership respected in
+            the trade, we pair deep process control with a capable team and efficient cost structure—so
+            customers worldwide get <strong>inspection-ready parts</strong> at a
+            <strong>fair price</strong>, without sacrificing spec.
+          </p>
 
-      <ul class="solution-points">
-        <li>Process-controlled machining</li>
-        <li>Repeatable production systems</li>
-        <li>Tolerance consistency at scale</li>
-        <li>Quality verification at every stage</li>
-      </ul>
+          <ul class="solution-points">
+            <li>
+              <span class="solution-points__lead">Engineering-first execution</span>
+              — Process-controlled machining, clear standards, and verification geared toward long runs.
+            </li>
+            <li>
+              <span class="solution-points__lead">Scale when you’re ready</span>
+              — Systems and capacity aimed at growing your orders without reinventing the line each
+              time.
+            </li>
+            <li>
+              <span class="solution-points__lead">Global delivery, human craft</span>
+              — Based in the Philippines, trusted by customers around the world—experienced people
+              behind consistent output.
+            </li>
+            <li>
+              <span class="solution-points__lead">Value that holds</span>
+              — Top-tier quality at an investment that reflects real manufacturing discipline, not
+              noise.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section-split__media">
+        <figure class="media-frame">
+          <img
+            src="/images/parts/parts-1.png"
+            alt="Premacor precision machined parts"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
+  /* Balanced split: keep image prominent without crushing copy width */
+  .solution .section-split {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    align-items: start;
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+
+  .solution .section-split__media {
+    width: 100%;
+    justify-self: start;
+  }
+
+  .solution .media-frame {
+    min-height: clamp(280px, 40vw, 520px);
+    width: min(100%, 760px);
+  }
+
+  @media (max-width: 960px) {
+    .solution .section-split {
+      grid-template-columns: 1fr;
+    }
+
+    .solution .media-frame {
+      min-height: clamp(280px, 56vw, 520px);
+      max-width: min(100%, 820px);
+      margin-inline: auto;
+    }
+  }
+
   .solution-content {
-    max-width: 800px;
+    max-width: 56ch;
+  }
+
+  .solution-eyebrow {
+    margin: 0 0 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 
   .solution-points {
@@ -30,7 +100,12 @@
   }
 
   .solution-points li {
-    margin-bottom: 12px;
-    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    line-height: 1.55;
+  }
+
+  .solution-points__lead {
+    display: inline;
+    font-weight: 600;
   }
 </style>

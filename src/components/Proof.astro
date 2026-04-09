@@ -1,36 +1,64 @@
-<section class="section proof">
+<section class="section section-band section-band--ink proof">
   <div class="container">
-    <div class="proof-content">
-      <span class="proof-label">Built on Experience</span>
+    <div class="section-split section-split--media-right">
+      <div class="section-split__text section-accent">
+        <div class="proof-content">
+          <span class="proof-label">Built on experience</span>
 
-      <h2>Over Four Decades of Precision</h2>
+          <h2>Over four decades of precision</h2>
 
-      <p>
-        Premacor combines process-driven manufacturing with decades of real-world experience,
-        delivering reliable and repeatable results across every production run.
-      </p>
+          <p>
+            Premacor combines process-driven manufacturing with decades of real-world experience,
+            delivering reliable and repeatable results across every production run.
+          </p>
 
-      <p>
-        What began as a small machine shop has grown into a trusted manufacturing partner,
-        built on discipline, precision, and long-term relationships.
-      </p>
+          <p>
+            What began as a small machine shop has grown into a trusted manufacturing partner, built
+            on discipline, precision, and long-term relationships.
+          </p>
 
-      <div class="proof-founder">
-        <strong>Jose T. Morales</strong>
-        <span>Founder & CEO</span>
+          <div class="proof-founder">
+            <strong>Jose T. Morales</strong>
+            <span>Founder & CEO</span>
+          </div>
+
+          <p class="proof-quote">
+            With over 50 years in the metalworking industry, his approach has always been the
+            same—precision is earned through process, and quality is built through people.
+          </p>
+        </div>
       </div>
 
-      <p class="proof-quote">
-        With over 50 years in the metalworking industry, his approach has always been the same—
-        precision is earned through process, and quality is built through people.
-      </p>
+      <div class="section-split__media section-split__media--natural">
+        <figure class="media-frame media-frame--natural">
+          <img
+            src="/images/general/owner.jpeg"
+            alt="Jose T. Morales, Founder and CEO, Premacor"
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
+  /* Don’t stretch the photo column to match text height; frame matches image */
+  .proof .section-split__media--natural {
+    align-self: start;
+    justify-self: end;
+    width: 100%;
+  }
+
+  @media (max-width: 960px) {
+    .proof .section-split__media--natural {
+      justify-self: center;
+    }
+  }
+
   .proof-content {
-    max-width: 800px;
+    max-width: 52ch;
   }
 
   .proof-label {
@@ -46,6 +74,7 @@
     margin-top: var(--space-element);
     display: flex;
     flex-direction: column;
+    gap: 0.2rem;
   }
 
   .proof-founder span {
