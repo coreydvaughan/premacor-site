@@ -29,7 +29,7 @@
   max-width: 52ch;
   font-size: var(--text-body);
   line-height: var(--leading-relaxed);
-  font-weight: 400;
+  font-weight: var(--weight-regular);
   letter-spacing: normal;
   color: var(--text-secondary);
 }
@@ -71,26 +71,54 @@ textarea {
   --space-5: 1.5rem;
   --space-6: 2rem;
 
-  /* Typography scale */
+  /*
+   * Typography — intentional token roles (hierarchy = editorial importance, not only px order)
+   *
+   * Scale steps (fixed ramp): xs < sm < md < lg < xl < 2xl
+   *   --text-md  → 1rem baseline step; use for UI that needs the nominal “body” step without fluid copy.
+   *   --text-body → fluid reading copy for <p> and longform; NOT the same as --text-md (body is tuned for readability).
+   *
+   * Semantic aliases:
+   *   --text-display        Fluid hero / primary page title (largest; pairs with .hero-content h1).
+   *   --text-hero-secondary Fluid secondary hero line (h2 under hero, not section h2).
+   *   --text-h2             Fluid section headings (<h2> in bands).
+   *   --text-2xl            Fixed 1.5rem — optional “major section intro” emphasis between display and h2 bands
+   *                         in hierarchy; use for large intro lines when h2 fluid is not the right fit.
+   *                         (Do not default every section to this — opt-in only.)
+   *   --text-h3             Subsection titles — aliases --text-lg (same as scale step lg).
+   *   --text-body           Fluid default paragraph copy.
+   *   --text-quote          Fluid pull quotes / testimonial emphasis.
+   *   --text-nav            Primary nav link size (header).
+   *   --text-ui             Footer lines, cite, founder meta — between sm and md; not for main paragraphs.
+   *   --text-label          Uppercase / micro labels (e.g. proof label); smaller than --text-ui.
+   *   --text-sm / --text-xs Scale steps for bullets, captions, eyebrows when a fixed step is required.
+   *
+   * --text-ui vs --text-sm: --text-sm is the ramp step (0.875rem); --text-ui is a semantic 0.9rem for muted supporting UI.
+   */
+
+  /* Scale steps */
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-md: 1rem;
   --text-lg: 1.125rem;
   --text-xl: 1.25rem;
   --text-2xl: 1.5rem;
-  /* Hero-aligned display (same clamp as .hero-content h1) */
+
+  /* Fluid + semantic (keep clamp() as authored — do not flatten) */
   --text-display: clamp(2.5rem, calc(4.5vw + 0.25rem), 3.75rem);
-  /* Semantic type (fluid + UI) */
-  --text-body: clamp(1.1rem, 1.6vw, 1.3rem);
-  --text-h2: clamp(1.8rem, 2.5vw, 2.2rem);
-  --text-h3: 1.1rem;
   --text-hero-secondary: clamp(1.75rem, 2.75vw, 2.5rem);
+  --text-h2: clamp(1.8rem, 2.5vw, 2.2rem);
+  --text-body: clamp(1.1rem, 1.6vw, 1.3rem);
   --text-quote: clamp(1.15rem, 2vw, 1.35rem);
+
+  /* Aliases tied to scale or dedicated sizes */
+  --text-h3: var(--text-lg);
   --text-nav: 0.95rem;
   --text-ui: 0.9rem;
   --text-label: 0.8rem;
   --text-accordion-trigger: calc((var(--text-sm) + var(--text-md)) / 2);
 
+  --weight-light: 300;
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-semibold: 600;
@@ -476,7 +504,7 @@ button {
   background-color: var(--btn-secondary-bg);
   border: 1px solid var(--line-strong);
   color: var(--btn-secondary-fg);
-  font-weight: 300;
+  font-weight: var(--weight-light);
   line-height: var(--leading-relaxed);
   letter-spacing: 0.015em;
   cursor: pointer;
@@ -490,7 +518,9 @@ button:hover {
 }
 
 /* =========================
-   TYPOGRAPHY
+   TYPOGRAPHY — element defaults (semantic tokens above)
+   h1 → --text-display   |  h2 → --text-h2   |  h3 → --text-h3 (alias of --text-lg)
+   p  → --text-body (fluid reading copy, not --text-md)
 ========================= */
 
 h1 {
@@ -959,7 +989,7 @@ body.hero-video-ready .hero-content .hero-actions {
 
   padding: var(--space-3) var(--space-5);
   font-size: var(--text-lg);
-  font-weight: 300;
+  font-weight: var(--weight-light);
   line-height: var(--leading-relaxed);
   letter-spacing: 0.015em;
   text-decoration: none;
@@ -1065,7 +1095,7 @@ button.cap-nav-tab {
   box-sizing: border-box;
   margin: 0;
   font-family: inherit;
-  font-weight: 300;
+  font-weight: var(--weight-light);
   appearance: none;
   -webkit-appearance: none;
   border-radius: 0;

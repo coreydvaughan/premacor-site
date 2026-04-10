@@ -819,7 +819,7 @@ import { data, tabLabels } from "./data";
     z-index: 1;
     padding: var(--cap-seg-label-padding-y) var(--cap-seg-label-padding-x);
     font-size: var(--text-lg);
-    font-weight: 300;
+    font-weight: var(--weight-light);
     letter-spacing: 0.015em;
     line-height: var(--leading-relaxed);
     transition: color 0.2s ease;
@@ -846,7 +846,7 @@ import { data, tabLabels } from "./data";
 
   .cap-seg__item:has(input:checked) .cap-seg__text {
     color: var(--text-on-elevated);
-    font-weight: 400;
+    font-weight: var(--weight-regular);
   }
 
   .cap-seg__item:has(input:not(:checked)) .cap-seg__text {
@@ -892,7 +892,7 @@ import { data, tabLabels } from "./data";
     padding: 0 clamp(var(--space-4), 4vw, calc(var(--space-1) * 5));
     font-family: inherit;
     font-size: var(--text-accordion-trigger);
-    font-weight: 600;
+    font-weight: var(--weight-semibold);
     letter-spacing: -0.01em;
     line-height: 1.3;
     text-align: left;
