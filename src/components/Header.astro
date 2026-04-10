@@ -59,10 +59,23 @@
       data-mobile-menu
       hidden
     >
-      <a href="/capabilities">Capabilities</a>
-      <a href="/industries">Industries</a>
-      <a href="/about">About</a>
-      <a href="#" class="header-mobile-menu-cta btn primary">Get In Touch</a>
+      <button
+        type="button"
+        class="header-mobile-close"
+        aria-label="Close menu"
+        data-mobile-menu-close
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"></path>
+        </svg>
+      </button>
+
+      <div class="header-mobile-menu-content">
+        <a href="/capabilities">Capabilities</a>
+        <a href="/industries">Industries</a>
+        <a href="/about">About</a>
+        <a href="#" class="header-mobile-menu-cta btn primary">Get In Touch</a>
+      </div>
     </nav>
   </div>
 </header>
@@ -80,10 +93,16 @@
       toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
       toggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
       menu.hidden = !isOpen;
+      document.body.style.overflow = isOpen ? "hidden" : "";
     }
 
     toggle.addEventListener("click", () => {
       setOpen(!isOpen);
+    });
+
+    const closeBtn = document.querySelector("[data-mobile-menu-close]");
+    closeBtn?.addEventListener("click", () => {
+      setOpen(false);
     });
 
     menu.querySelectorAll("a").forEach((link) => {
@@ -246,35 +265,84 @@
     max-width: 100%;
   }
 
+  /* Full-screen overlay (below md only — parent is md:hidden) */
   .header-mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: var(--bg-primary);
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
-    padding: 0.75rem 1rem 1rem;
-    border-bottom: 1px solid var(--line-subtle);
   }
 
   .header-mobile-menu[hidden] {
     display: none !important;
   }
 
- .header-mobile-menu a:not(.btn) {
-  display: block;
-  padding: 0.65rem 0;
-  font-size: 0.95rem;
-  color: var(--text-nav-muted);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
+  .header-mobile-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+  }
 
-  .header-mobile-menu a:hover {
+  .header-mobile-close:focus-visible {
+    outline: 2px solid var(--line-strong);
+    outline-offset: 2px;
+  }
+
+  .header-mobile-menu-content {
+    box-sizing: border-box;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 1.5rem;
+    width: 100%;
+    min-height: 0;
+    padding: 4.5rem 1.5rem 2rem;
+    text-align: left;
+  }
+
+  .header-mobile-menu-content a:not(.btn) {
+    display: block;
+    padding: 0.35rem 0;
+    font-size: 1.25rem;
+    color: var(--text-nav-muted);
+    text-decoration: none;
+    text-align: left;
+    transition: color 0.2s ease;
+  }
+
+  .header-mobile-menu-content a:not(.btn):hover {
     color: var(--text-primary);
   }
 
   .header-mobile-menu .header-mobile-menu-cta {
-    margin-top: 0.5rem;
-    text-align: center;
-    padding: 10px 16px;
+    align-self: flex-start;
+    margin-top: 1rem;
+    text-align: left;
+    padding: 10px 20px;
     font-size: 14px;
   }
 </style>
