@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import SocialRail from "../components/SocialRail.astro";
+import RfqModal from "../components/RfqModal.astro";
 ---
 
 <html lang="en" data-theme="industrial">
@@ -16,6 +17,7 @@ import SocialRail from "../components/SocialRail.astro";
       <slot />
       <SocialRail />
     </div>
+    <RfqModal />
     <script is:inline>
       (function () {
         function reveal() {

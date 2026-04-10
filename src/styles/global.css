@@ -785,47 +785,23 @@ body.hero-video-ready .hero-content .hero-actions {
   background-size: 48px 48px;
 }
 
-/* Two-column split — single system for media + sidebar layouts */
+/* Two-column split — mobile-first: single column below 1024px */
 .layout-split {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  grid-template-columns: 1fr;
   gap: var(--layout-split-gap);
-  align-items: center;
-}
-
-/* Capabilities: fixed nav column + fluid panel */
-.layout-split--sidebar {
-  grid-template-columns: 220px minmax(0, 1fr);
   align-items: start;
 }
 
 .layout-split--capabilities.layout-split--sidebar {
-  grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
-  align-items: start;
+  grid-template-columns: 1fr;
+  gap: var(--space-stack-major-lg);
+  align-items: stretch;
 }
 
 /* Image right (default DOM: text, then media) */
 .layout-split--media-right .layout-split__media {
   min-height: 0;
-}
-
-/* Image left on large screens; readable order on small */
-.layout-split--media-left .layout-split__media {
-  order: -1;
-}
-
-@media (max-width: 960px) {
-  .layout-split {
-    grid-template-columns: 1fr;
-  }
-
-  .layout-split--media-left .layout-split__text {
-    order: 1;
-  }
-
-  .layout-split--media-left .layout-split__media {
-    order: 2;
-  }
 }
 
 .layout-split__sidebar {
@@ -836,12 +812,27 @@ body.hero-video-ready .hero-content .hero-actions {
   min-width: 0;
 }
 
-/* Capabilities: stack earlier than generic split, token-driven gap */
-@media (max-width: 1023px) {
+@media (min-width: 1024px) {
+  .layout-split {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: var(--layout-split-gap);
+    align-items: center;
+  }
+
+  .layout-split--sidebar {
+    grid-template-columns: 220px minmax(0, 1fr);
+    align-items: start;
+  }
+
   .layout-split--capabilities.layout-split--sidebar {
-    grid-template-columns: 1fr;
-    gap: var(--space-stack-major-lg);
-    align-items: stretch;
+    grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--layout-split-gap);
+  }
+
+  /* Image left: media column first on large screens only */
+  .layout-split--media-left .layout-split__media {
+    order: -1;
   }
 }
 

@@ -3,9 +3,9 @@
 
 <header class="header">
   <!-- ———————————————————————————————————————————————————————————————
-       DESKTOP — unchanged layout (md and up)
+       DESKTOP — lg (1024px) and up
        ——————————————————————————————————————————————————————————————— -->
-  <div class="header-desktop hidden w-full md:flex">
+  <div class="header-desktop hidden w-full lg:flex">
     <div class="header-inner container">
       <a href="/" class="logo">
         <img src="/images/general/premacor-logo.png" alt="Premacor" />
@@ -19,14 +19,14 @@
         <a href="/about">About</a>
       </nav>
 
-      <a href="#" class="btn primary">Get In Touch</a>
+      <a href="#" class="btn primary" data-rfq-open>Get a Quote</a>
     </div>
   </div>
 
   <!-- ———————————————————————————————————————————————————————————————
-       MOBILE — logo left, menu toggle right, panel below (below md)
+       MOBILE — logo left, menu toggle right, panel below (below lg)
        ——————————————————————————————————————————————————————————————— -->
-  <div class="header-mobile flex w-full flex-col md:hidden">
+  <div class="header-mobile flex w-full flex-col lg:hidden">
     <div class="header-mobile-bar">
       <a href="/" class="header-mobile-logo">
         <img src="/images/general/premacor-logo.png" alt="Premacor" width="140" height="48" />
@@ -74,7 +74,7 @@
         <a href="/capabilities">Capabilities</a>
         <a href="/industries">Industries</a>
         <a href="/about">About</a>
-        <a href="#" class="header-mobile-menu-cta btn primary">Get In Touch</a>
+        <a href="#" class="header-mobile-menu-cta btn primary" data-rfq-open>Get a Quote</a>
       </div>
     </nav>
   </div>
@@ -109,6 +109,17 @@
       link.addEventListener("click", () => {
         setOpen(false);
       });
+    });
+
+    /* Close mobile nav before RFQ modal opens (capture runs before RfqModal’s bubble listener). */
+    document.querySelectorAll("[data-rfq-open]").forEach((el) => {
+      el.addEventListener(
+        "click",
+        function () {
+          if (isOpen) setOpen(false);
+        },
+        true
+      );
     });
   })();
 </script>
@@ -265,7 +276,7 @@
     max-width: 100%;
   }
 
-  /* Full-screen overlay (below md only — parent is md:hidden) */
+  /* Full-screen overlay (below lg only — parent is lg:hidden) */
   .header-mobile-menu {
     position: fixed;
     inset: 0;
