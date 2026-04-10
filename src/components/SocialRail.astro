@@ -102,16 +102,11 @@
 
   .social-rail__line {
     flex: 1 1 auto;
-    width: 3px;
+    width: 1px;
     min-height: 0;
     align-self: center;
     flex-shrink: 0;
-    border-radius: 2px;
-    background: linear-gradient(
-      180deg,
-      var(--accent-line, rgba(91, 124, 156, 0.85)),
-      rgba(91, 124, 156, 0.15)
-    );
+    background: var(--line-subtle);
   }
 
   .social-rail__nav {
@@ -127,12 +122,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--text-nav-muted);
     transition: color 0.2s ease, transform 0.2s ease;
   }
 
   .social-rail__link:hover {
-    color: rgba(255, 255, 255, 1);
+    color: var(--text-primary);
     transform: scale(1.08);
   }
 

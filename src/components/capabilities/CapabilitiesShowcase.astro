@@ -1,0 +1,709 @@
+---
+import { data, tabLabels } from "./data";
+---
+
+<div class="cap-showcase" data-cap-showcase>
+  <header class="cap-showcase__intro cap-scroll-group">
+    <h2
+      class="cap-showcase__intro-title cap-scroll-presence text-3xl font-semibold tracking-tight md:text-4xl"
+      style="--cap-scroll-delay: 0ms"
+    >
+      Built for Production. Engineered for Scale.
+    </h2>
+    <p
+      class="cap-showcase__intro-lead cap-scroll-presence text-base leading-relaxed"
+      style="--cap-scroll-delay: 26ms"
+    >
+      Explore how we translate proven designs into stable manufacturing—by capability or by where
+      your parts need to perform.
+    </p>
+  </header>
+
+  <div role="radiogroup" aria-label="Capability view" class="cap-seg cap-showcase__stack flex w-full max-w-lg flex-col">
+    <div class="cap-seg__track inline-flex rounded-full">
+      <label class="cap-seg__item relative flex flex-1 cursor-pointer select-none items-center justify-center rounded-full">
+        <input
+          type="radio"
+          name="cap-showcase-category"
+          value="services"
+          class="peer sr-only"
+          checked
+          data-cap-cat
+        />
+        <span class="cap-seg__face pointer-events-none absolute inset-0 rounded-full" aria-hidden="true"></span>
+        <span class="cap-seg__text relative z-[1]">Services</span>
+      </label>
+      <label class="cap-seg__item relative flex flex-1 cursor-pointer select-none items-center justify-center rounded-full">
+        <input type="radio" name="cap-showcase-category" value="useCases" class="peer sr-only" data-cap-cat />
+        <span class="cap-seg__face pointer-events-none absolute inset-0 rounded-full" aria-hidden="true"></span>
+        <span class="cap-seg__text relative z-[1]">Use Cases</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="layout-split layout-split--sidebar layout-split--capabilities cap-showcase__split-after-seg">
+    <aside class="layout-split__sidebar">
+      <nav aria-label="Capability topics">
+        <div class="cap-nav-wrap">
+          <div class="cap-nav-tablist" role="tablist" aria-orientation="vertical" data-cap-tablist></div>
+        </div>
+      </nav>
+    </aside>
+
+    <div class="layout-split__content">
+      <div role="tabpanel" tabindex="0" data-cap-panel class="outline-none"></div>
+    </div>
+  </div>
+
+  <p class="cap-showcase__stack--cta">
+    <a href="#" class="btn primary">Start Your Project</a>
+  </p>
+</div>
+
+<script define:vars={{ data, tabLabels }}>
+  /** @typedef {{ slug: string; title: string; description: string; bullets: string[]; image: string }} CapabilityEntry */
+
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  /** @type {"services" | "useCases"} */
+  let activeCategory = "services";
+  let activeTab = "cnc-machining";
+
+  /** @returns {CapabilityEntry[]} */
+  function items() {
+    return data[activeCategory];
+  }
+
+  /** @returns {CapabilityEntry} */
+  function current() {
+    const list = items();
+    const row = list.find((r) => r.slug === activeTab);
+    return row ?? list[0];
+  }
+
+  function tabLabel(slug) {
+    return tabLabels[slug] ?? slug;
+  }
+
+  /** @param {CapabilityEntry} entry */
+  function renderPanelHtml(entry) {
+    const bullets = entry.bullets
+      .map(
+        (b) =>
+          `<li class="cap-panel__bullet text-sm leading-relaxed">${escapeHtml(b)}</li>`
+      )
+      .join("");
+    return (
+      `<div class="cap-panel">` +
+      `<div class="cap-panel-surface">` +
+      `<div class="cap-panel-motion cap-scroll-group" data-cap-panel-motion>` +
+      `<div class="cap-panel__layout">` +
+      `<div class="cap-panel__copy">` +
+      `<h3 class="cap-panel__title cap-scroll-presence text-xl font-semibold tracking-tight md:text-[1.375rem]" style="--cap-scroll-delay: 0ms">${escapeHtml(entry.title)}</h3>` +
+      `<p class="cap-panel__desc cap-scroll-presence text-base leading-relaxed" style="--cap-scroll-delay: 23ms">${escapeHtml(entry.description)}</p>` +
+      `<ul class="cap-panel__bullets cap-scroll-presence" style="--cap-scroll-delay: 47ms">${bullets}</ul>` +
+      `</div>` +
+      `<div class="cap-panel__media">` +
+      `<div class="cap-panel-media cap-scroll-presence" style="--cap-scroll-delay: 72ms">` +
+      `<figure class="cap-panel__figure">` +
+      `<img src="${escapeHtml(entry.image)}" alt="" width="1024" height="640" loading="lazy" decoding="async" class="cap-panel__img" />` +
+      `<figcaption class="sr-only">${escapeHtml(entry.title)}</figcaption>` +
+      `</figure>` +
+      `</div>` +
+      `</div>` +
+      `</div>` +
+      `</div>` +
+      `</div>` +
+      `</div>`
+    );
+  }
+
+  /** @param {HTMLElement} panel */
+  function mountPanelEnter(panel) {
+    const motion = panel.querySelector("[data-cap-panel-motion]");
+    if (!motion) return;
+    motion.classList.remove("cap-panel-motion--exit");
+    motion.classList.remove("cap-panel-motion--enter-active");
+    motion.offsetHeight;
+    window.setTimeout(() => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          motion.classList.add("cap-panel-motion--enter-active");
+        });
+      });
+    }, 50);
+  }
+
+  /**
+   * @param {HTMLElement} root
+   * @param {HTMLElement} panel
+   * @param {CapabilityEntry} item
+   */
+  /** @type {WeakMap<HTMLElement, IntersectionObserver>} */
+  const capScrollObservers = new WeakMap();
+
+  /** @param {HTMLElement} root */
+  function setupScrollPresence(root) {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const allPresence = root.querySelectorAll(".cap-scroll-presence");
+    if (reduce) {
+      allPresence.forEach((el) => el.classList.add("is-revealed"));
+      return;
+    }
+
+    let io = capScrollObservers.get(root);
+    if (!io) {
+      io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            if (entry.intersectionRatio < 0.4) continue;
+            const group = entry.target;
+            if (!(group instanceof HTMLElement)) continue;
+            group.querySelectorAll(".cap-scroll-presence").forEach((child) => {
+              child.classList.add("is-revealed");
+            });
+            io.unobserve(group);
+          }
+        },
+        { threshold: 0.4, rootMargin: "0px 0px -25% 0px" }
+      );
+      capScrollObservers.set(root, io);
+    }
+
+    root.querySelectorAll(".cap-scroll-group").forEach((group) => {
+      if (!(group instanceof HTMLElement)) return;
+      const pending = Array.from(group.querySelectorAll(".cap-scroll-presence")).some(
+        (el) => !el.classList.contains("is-revealed")
+      );
+      if (!pending) return;
+      io.observe(group);
+    });
+  }
+
+  function replacePanelContent(root, panel, item) {
+    panel.id = "cap-showcase-panel";
+    panel.setAttribute("aria-labelledby", `cap-showcase-tab-${item.slug}`);
+    panel.innerHTML = renderPanelHtml(item);
+    root.dataset.capPanelAnimated = "true";
+    const motion = panel.querySelector("[data-cap-panel-motion]");
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      motion?.classList.add("cap-panel-motion--static");
+      setupScrollPresence(root);
+      return;
+    }
+    mountPanelEnter(panel);
+    setupScrollPresence(root);
+  }
+
+  /** @param {HTMLElement} root */
+  function render(root) {
+    const tablist = root.querySelector("[data-cap-tablist]");
+    const panel = root.querySelector("[data-cap-panel]");
+    if (!tablist || !panel) return;
+
+    const list = items();
+    if (!list.some((r) => r.slug === activeTab)) {
+      activeTab = list[0].slug;
+    }
+
+    const item = current();
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    tablist.replaceChildren();
+    list.forEach((row) => {
+      const selected = row.slug === activeTab;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.setAttribute("role", "tab");
+      btn.id = `cap-showcase-tab-${row.slug}`;
+      btn.setAttribute("aria-selected", selected ? "true" : "false");
+      btn.setAttribute("aria-controls", "cap-showcase-panel");
+      btn.tabIndex = selected ? 0 : -1;
+      btn.dataset.capTabSlug = row.slug;
+      btn.textContent = tabLabel(row.slug);
+      btn.className = selected ? "cap-nav-tab cap-nav-tab--active" : "cap-nav-tab";
+      btn.addEventListener("click", () => {
+        activeTab = row.slug;
+        render(root);
+      });
+      tablist.appendChild(btn);
+    });
+
+    if (reduceMotion) {
+      replacePanelContent(root, panel, item);
+      root.querySelectorAll("[data-cap-cat]").forEach((input) => {
+        if (input instanceof HTMLInputElement) {
+          input.checked = input.value === activeCategory;
+        }
+      });
+      return;
+    }
+
+    const motion = panel.querySelector("[data-cap-panel-motion]");
+    const hasPrior = root.dataset.capPanelAnimated === "true" && motion;
+
+    if (!hasPrior) {
+      replacePanelContent(root, panel, item);
+      root.querySelectorAll("[data-cap-cat]").forEach((input) => {
+        if (input instanceof HTMLInputElement) {
+          input.checked = input.value === activeCategory;
+        }
+      });
+      return;
+    }
+
+    motion.classList.remove("cap-panel-motion--enter-active");
+    motion.offsetHeight;
+    motion.classList.add("cap-panel-motion--exit");
+
+    let finished = false;
+    const done = () => {
+      if (finished) return;
+      finished = true;
+      motion.removeEventListener("transitionend", onEnd);
+      replacePanelContent(root, panel, item);
+      root.querySelectorAll("[data-cap-cat]").forEach((input) => {
+        if (input instanceof HTMLInputElement) {
+          input.checked = input.value === activeCategory;
+        }
+      });
+    };
+
+    /** @param {TransitionEvent} e */
+    const onEnd = (e) => {
+      if (e.target !== motion) return;
+      if (e.propertyName !== "opacity" && e.propertyName !== "transform") return;
+      done();
+    };
+
+    motion.addEventListener("transitionend", onEnd);
+    window.setTimeout(done, 200);
+  }
+
+  /** @param {HTMLElement} root */
+  function setupSectionEntry(root) {
+    root.classList.remove("cap-showcase--await-reveal");
+    root.classList.add("cap-showcase--revealed");
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+  }
+
+  /** @param {HTMLElement} root */
+  function bind(root) {
+    setupSectionEntry(root);
+
+    root.querySelectorAll("[data-cap-cat]").forEach((input) => {
+      input.addEventListener("change", () => {
+        if (!(input instanceof HTMLInputElement) || !input.checked) return;
+        const v = input.value;
+        if (v !== "services" && v !== "useCases") return;
+        activeCategory = v;
+        activeTab = data[activeCategory][0].slug;
+        render(root);
+      });
+    });
+
+    const tablist = root.querySelector("[data-cap-tablist]");
+    tablist?.addEventListener("keydown", (e) => {
+      const ev = /** @type {KeyboardEvent} */ (e);
+      const tabs = /** @type {HTMLElement[]} */ (
+        Array.from(root.querySelectorAll("[data-cap-tab-slug]"))
+      );
+      const i = tabs.findIndex((t) => t.getAttribute("aria-selected") === "true");
+      if (i < 0) return;
+      let next = i;
+      if (ev.key === "ArrowDown" || ev.key === "ArrowRight") {
+        ev.preventDefault();
+        next = (i + 1) % tabs.length;
+      } else if (ev.key === "ArrowUp" || ev.key === "ArrowLeft") {
+        ev.preventDefault();
+        next = (i - 1 + tabs.length) % tabs.length;
+      } else if (ev.key === "Home") {
+        ev.preventDefault();
+        next = 0;
+      } else if (ev.key === "End") {
+        ev.preventDefault();
+        next = tabs.length - 1;
+      } else {
+        return;
+      }
+      const t = tabs[next];
+      if (t?.dataset.capTabSlug) {
+        activeTab = t.dataset.capTabSlug;
+        render(root);
+        t.focus();
+      }
+    });
+
+    render(root);
+  }
+
+  function boot() {
+    document.querySelectorAll("[data-cap-showcase]").forEach((el) => {
+      if (el instanceof HTMLElement) bind(el);
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+</script>
+
+<style>
+  /* Intro: title + lead copy — gap from tokens only (no Tailwind spacing utilities) */
+  .cap-showcase__intro {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-content-block);
+    max-width: min(var(--measure-cap-intro), 100%);
+  }
+
+  .cap-showcase__intro p {
+    max-width: min(var(--measure-cap-lead), 100%);
+  }
+
+  .cap-showcase__intro-title {
+    color: var(--text-primary);
+  }
+
+  .cap-showcase__intro-lead {
+    color: var(--text-secondary);
+  }
+
+  /* Scroll presence — IO targets .cap-scroll-group; .is-revealed on children (stagger via --cap-scroll-delay) */
+  .cap-scroll-presence {
+    opacity: 0;
+    transform: translateY(var(--cap-scroll-shift));
+    transition:
+      opacity var(--cap-scroll-duration) var(--cap-scroll-ease) var(--cap-scroll-delay, 0ms),
+      transform var(--cap-scroll-duration) var(--cap-scroll-ease) var(--cap-scroll-delay, 0ms);
+  }
+
+  .cap-scroll-presence.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Section entry — IntersectionObserver (script adds / removes classes) */
+  .cap-showcase--await-reveal {
+    opacity: 0;
+    transform: translateY(var(--motion-cap-section-shift));
+  }
+
+  .cap-showcase--revealed {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity var(--motion-duration-cap-section) var(--motion-ease-cap-section),
+      transform var(--motion-duration-cap-section) var(--motion-ease-cap-section);
+  }
+
+  .cap-showcase__stack {
+    margin-top: var(--space-stack-major);
+  }
+
+  .cap-showcase__stack--cta {
+    margin-top: var(--space-stack-major);
+  }
+
+  @media (min-width: 1024px) {
+    .cap-showcase__stack--cta {
+      margin-top: var(--space-stack-major-lg);
+    }
+  }
+
+  .cap-nav-wrap {
+    position: relative;
+    padding-left: var(--cap-nav-rail-inset);
+  }
+
+  .cap-nav-wrap::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--line-subtle);
+    pointer-events: none;
+  }
+
+  @media (max-width: 1023px) {
+    .cap-nav-wrap {
+      padding-left: 0;
+    }
+
+    .cap-nav-wrap::before {
+      display: none;
+    }
+  }
+
+  .cap-showcase__split-after-seg {
+    margin-top: var(--space-stack-cap-after-seg);
+  }
+
+  /* Detail panel: outer shell + quiet content surface */
+  .cap-panel {
+    width: 100%;
+  }
+
+  .cap-panel-surface {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: var(--space-content-block);
+    border-radius: var(--radius-surface-soft);
+    border: 1px solid var(--line-subtle);
+    box-shadow: none;
+    background: color-mix(in srgb, var(--bg-primary) 89%, var(--text-primary) 11%);
+    overflow: hidden;
+  }
+
+  /* Panel content motion (opacity + transform only) */
+  .cap-panel-motion {
+    opacity: 0;
+    transform: translateY(var(--motion-cap-panel-shift-in));
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .cap-panel-motion--enter-active {
+    animation: cap-panel-enter var(--motion-duration-cap-panel) var(--motion-ease-cap-panel)
+      var(--motion-delay-cap-panel-enter) both;
+  }
+
+  .cap-panel-motion--static {
+    opacity: 1;
+    transform: none;
+  }
+
+  .cap-panel-motion--exit {
+    animation: none;
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--motion-cap-panel-shift-out)));
+    transition:
+      opacity var(--motion-duration-cap-panel-exit) var(--motion-ease-cap-nav),
+      transform var(--motion-duration-cap-panel-exit) var(--motion-ease-cap-nav);
+  }
+
+  @keyframes cap-panel-enter {
+    from {
+      opacity: 0;
+      transform: translateY(var(--motion-cap-panel-shift-in));
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Text block vs image: major-lg separation (no margin stacking) */
+  .cap-panel__layout {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-stack-major-lg);
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .cap-panel__layout {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: var(--space-stack-major-lg);
+    }
+  }
+
+  /* Media column: token gap from copy is on .cap-panel__layout */
+  .cap-panel__media {
+    min-width: 0;
+    flex: 1 1 0%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* Anchored image block: fills media column, clipped to surface (no float) */
+  .cap-panel-media {
+    width: 100%;
+    align-self: stretch;
+    border-radius: var(--radius-inset-soft);
+    overflow: hidden;
+    border: 1px solid var(--line-subtle);
+    background: color-mix(in srgb, var(--bg-primary) 93%, var(--text-primary) 7%);
+  }
+
+  @media (min-width: 1024px) {
+    .cap-panel__media {
+      align-items: flex-end;
+    }
+
+    .cap-panel-media {
+      max-width: min(100%, var(--measure-cap-media-max));
+      margin-left: auto;
+      margin-right: 0;
+    }
+  }
+
+  .cap-panel__figure {
+    margin: 0;
+    display: block;
+  }
+
+  .cap-panel__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  /* Title → description → bullets: token gap only */
+  .cap-panel__copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-stack-major);
+    min-width: 0;
+    flex: 1 1 0%;
+    max-width: min(var(--measure-cap-copy), 100%);
+  }
+
+  .cap-panel__copy > * {
+    margin: 0;
+  }
+
+  .cap-panel__desc {
+    max-width: min(var(--measure-cap-desc), 100%);
+    color: var(--text-secondary);
+  }
+
+  .cap-panel__title {
+    color: var(--text-primary);
+  }
+
+  .cap-panel__bullet {
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 1023px) {
+    .cap-panel__copy {
+      max-width: none;
+    }
+  }
+
+  .cap-panel__bullets {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-list-gap-tight);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cap-seg__track {
+    padding: var(--cap-seg-track-padding);
+    border: 1px solid var(--cap-seg-track-border);
+    background: var(--cap-seg-track-bg);
+  }
+
+  .cap-seg__item {
+    min-height: var(--cap-seg-item-min-height);
+  }
+
+  .cap-seg__text {
+    padding: var(--cap-seg-label-padding-y) var(--cap-seg-label-padding-x);
+    font-size: 18px;
+    font-weight: 300;
+    letter-spacing: 0.015em;
+    line-height: 1.6;
+    transition: color 0.2s ease;
+  }
+
+  .cap-seg__face {
+    transition: background 0.2s ease;
+  }
+
+  .cap-seg__item:has(:focus-visible) {
+    outline: 2px solid var(--line-strong);
+    outline-offset: 2px;
+    border-radius: 9999px;
+  }
+
+  .cap-seg__item:has(input:checked) .cap-seg__face {
+    background: var(--cap-seg-face-bg);
+    box-shadow: none;
+  }
+
+  .cap-seg__item:has(input:checked) .cap-seg__text {
+    color: var(--text-on-elevated);
+    font-weight: 400;
+  }
+
+  .cap-seg__item:has(input:not(:checked)) .cap-seg__text {
+    color: color-mix(in srgb, var(--text-muted) 72%, transparent);
+  }
+
+  .cap-seg__item:has(input:not(:checked)):hover .cap-seg__text {
+    color: color-mix(in srgb, var(--text-primary) 88%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cap-seg__face {
+      transition: none;
+    }
+  }
+
+  /* Capability nav layout (tab button styles: global.css) */
+  .cap-nav-tablist {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cap-nav-tablist-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (max-width: 1023px) {
+    .cap-nav-tablist {
+      flex-direction: row;
+      flex-wrap: wrap;
+      row-gap: var(--cap-nav-tablist-gap-row);
+      column-gap: var(--cap-nav-tablist-gap-inline);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cap-scroll-presence {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    .cap-showcase--await-reveal {
+      opacity: 1;
+      transform: none;
+    }
+
+    .cap-showcase--revealed {
+      transition: none;
+    }
+
+    .cap-panel-motion,
+    .cap-panel-motion--enter-active {
+      opacity: 1 !important;
+      transform: none !important;
+      animation: none !important;
+    }
+  }
+</style>

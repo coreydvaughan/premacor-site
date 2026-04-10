@@ -1,0 +1,245 @@
+<section class="hero">
+  <div class="hero-media">
+    <video
+      class="hero-video"
+      src="/videos/hero.mp4"
+      autoplay
+      muted
+      loop
+      playsinline
+    ></video>
+
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="hero-wrapper">
+    <div class="hero-content">
+      <h1>
+        Built for Production. <br />
+        Engineered for{" "}
+        <span class="hero-rotating-line">
+          <span id="hero-rotating-word" class="hero-rotating" aria-live="polite"></span>
+        </span>
+      </h1>
+
+      <h2 class="hero-tagline">
+        Premacor takes proven part designs and delivers reliable, repeatable manufacturing at scale.
+      </h2>
+
+      <div class="hero-actions">
+        <a href="#" class="btn primary">Start Your Project</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  /* VIDEO LAYER */
+  .hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7) contrast(1.05);
+    transform: scale(1.05);
+  }
+
+  /* DARK CONTROL OVERLAY */
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-hero-overlay);
+  }
+
+  /* CONTENT — custom wrapper replaces global .container constraints */
+  .hero-wrapper {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: min(1600px, calc(100vw - 1rem));
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: clamp(0.5rem, 1.25vw, 1.25rem);
+    padding-right: clamp(0.5rem, 1.25vw, 1.25rem);
+    box-sizing: border-box;
+  }
+
+  .hero-content {
+    max-width: 880px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-content h1 {
+    margin-bottom: clamp(1.2rem, 2vw, 1.8rem);
+  }
+
+  .hero-rotating-line {
+    display: inline;
+    white-space: nowrap;
+  }
+
+  .hero-rotating {
+    display: inline;
+    transition: opacity 1.15s ease;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.18em;
+    text-decoration-color: var(--text-decoration-muted);
+  }
+
+  .hero-content h2.hero-tagline {
+    margin-bottom: clamp(1.5rem, 2.5vw, 2.2rem);
+    max-width: 52ch;
+  }
+
+  .hero-actions {
+    margin-top: clamp(1.5rem, 2.5vw, 2.5rem);
+  }
+</style>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  /* VIDEO LAYER */
+  .hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7) contrast(1.05);
+    transform: scale(1.05);
+  }
+
+  /* CONTENT — custom wrapper replaces global .container constraints */
+  .hero-wrapper {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: min(1600px, calc(100vw - 1rem));
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: clamp(0.5rem, 1.25vw, 1.25rem);
+    padding-right: clamp(0.5rem, 1.25vw, 1.25rem);
+    box-sizing: border-box;
+  }
+
+  .hero-content {
+    max-width: 880px;
+  }
+
+  .hero-actions {
+    margin-top: var(--space-element);
+  }
+</style>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  /* VIDEO LAYER */
+  .hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* CONTENT — custom wrapper replaces global .container constraints */
+  .hero-wrapper {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: min(1600px, calc(100vw - 1rem));
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: clamp(0.5rem, 1.25vw, 1.25rem);
+    padding-right: clamp(0.5rem, 1.25vw, 1.25rem);
+    box-sizing: border-box;
+  }
+
+  .hero-content {
+    max-width: 880px;
+  }
+
+  .hero-actions {
+    margin-top: var(--space-element);
+  }
+</style>
+
+<script>
+  (function () {
+    const words = ["Consistency", "Precision", "Durability", "Performance", "Excellence"];
+
+    function init() {
+      const el = document.getElementById("hero-rotating-word");
+      if (!el) return;
+
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        el.textContent = words[0];
+        return;
+      }
+
+      const fadeMs = 1150;
+      const holdMs = 4000;
+      let i = 0;
+
+      el.textContent = words[0];
+      el.style.opacity = "1";
+
+      function tick() {
+        window.setTimeout(function () {
+          el.style.opacity = "0";
+          window.setTimeout(function () {
+            i = (i + 1) % words.length;
+            el.textContent = words[i];
+            el.style.opacity = "1";
+            tick();
+          }, fadeMs);
+        }, holdMs);
+      }
+
+      tick();
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+  })();
+</script>

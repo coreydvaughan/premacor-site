@@ -1,7 +1,7 @@
 <section class="section section-band section-band--light solution">
   <div class="container">
-    <div class="section-split section-split--media-left">
-      <div class="section-split__text section-accent">
+    <div class="layout-split layout-split--media-left">
+      <div class="layout-split__text section-accent">
         <div class="solution-content">
           <p class="solution-eyebrow">How Premacor fits</p>
           <h2>Forty years of discipline, built for global production</h2>
@@ -38,7 +38,7 @@
         </div>
       </div>
 
-      <div class="section-split__media">
+      <div class="layout-split__media">
         <figure class="media-frame">
           <img
             src="/images/parts/parts-1.png"
@@ -54,13 +54,11 @@
 
 <style>
   /* Balanced split: keep image prominent without crushing copy width */
-  .solution .section-split {
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  .solution .layout-split {
     align-items: start;
-    gap: clamp(2rem, 4vw, 4rem);
   }
 
-  .solution .section-split__media {
+  .solution .layout-split__media {
     width: 100%;
     justify-self: start;
   }
@@ -71,10 +69,6 @@
   }
 
   @media (max-width: 960px) {
-    .solution .section-split {
-      grid-template-columns: 1fr;
-    }
-
     .solution .media-frame {
       min-height: clamp(280px, 56vw, 520px);
       max-width: min(100%, 820px);

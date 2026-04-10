@@ -1,0 +1,1051 @@
+@import "tailwindcss";
+
+/* =========================
+   RESET
+========================= */
+
+/* Hero component global overrides for spacing and typography hierarchy */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-content h1 {
+  margin-bottom: clamp(1.2rem, 2vw, 1.8rem);
+  font-size: clamp(2.5rem, calc(4.5vw + 0.25rem), 3.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.hero-content h2:not(.hero-tagline) {
+  font-size: clamp(1.75rem, 2.75vw, 2.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+}
+
+.hero-content h2.hero-tagline {
+  margin-bottom: clamp(1.5rem, 2.5vw, 2.2rem);
+  max-width: 52ch;
+  font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+  line-height: 1.6;
+  font-weight: 400;
+  letter-spacing: normal;
+  color: var(--text-secondary);
+}
+
+.hero-actions {
+  margin-top: clamp(1.5rem, 2.5vw, 2.5rem);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+img,
+picture,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+textarea {
+  font: inherit;
+}
+
+/* =========================
+   THEME — shared layout / spacing / motion / radius (non-color)
+========================= */
+
+:root {
+  /* Layout */
+  --max-width: 1200px;
+  --max-width-wide: min(1400px, 100vw);
+  --container-showcase-max: min(1700px, 100%);
+  --container-inline-padding: clamp(24px, 6vw, 80px);
+
+  /* Spacing */
+  --space-section: clamp(4rem, 8vw, 6rem);
+  --space-element: clamp(1rem, 2vw, 2rem);
+  --layout-split-gap: clamp(3.5rem, 6vw, 6.5rem);
+  --space-stack-major: 3.25rem;
+  --space-stack-major-lg: 5.25rem;
+  --space-content-block: 1.5rem;
+  --space-list-gap-tight: calc(var(--space-content-block) * 0.52);
+  --cap-nav-rail-inset: 1rem;
+  --space-stack-cap-after-seg: calc(
+    var(--space-stack-major-lg) + var(--space-content-block) + var(--space-element)
+  );
+  --cap-seg-track-padding: calc(var(--space-content-block) * 0.273);
+  --cap-seg-item-min-height: var(--space-stack-major);
+  --cap-seg-label-padding-y: calc(var(--space-content-block) * 0.591);
+  --cap-seg-label-padding-x: clamp(1.25rem, 0.85rem + 1.75vw, 1.75rem);
+  --cap-nav-tablist-gap: clamp(1.375rem, 0.65rem + 2.4vw, 1.875rem);
+  --cap-nav-tablist-gap-row: clamp(0.75rem, 2vw, 1.125rem);
+  --cap-nav-tablist-gap-inline: clamp(0.875rem, 2.5vw, 1.375rem);
+
+  /* Radius */
+  --radius-surface-soft: 0.875rem;
+  --radius-inset-soft: 0.5rem;
+
+  /* Measure */
+  --measure-cap-intro: 48rem;
+  --measure-cap-lead: 42rem;
+  --measure-cap-copy: 38rem;
+  --measure-cap-desc: 40rem;
+  --measure-cap-media-max: 38rem;
+
+  /* Nav hit area */
+  --cap-nav-tab-pad-y: 0.5rem;
+  --cap-nav-tab-pad-x: 0.9375rem;
+  --cap-nav-tab-indicator: 0.25rem;
+
+  /* Motion */
+  --hero-intro-duration: 0.78s;
+  --hero-intro-ease: cubic-bezier(0.2, 0.9, 0.2, 1);
+  --motion-ease-cap-panel: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-duration-cap-panel: 280ms;
+  --motion-duration-cap-panel-exit: 150ms;
+  --motion-delay-cap-panel-enter: 50ms;
+  --motion-duration-cap-nav: 160ms;
+  --motion-ease-cap-nav: ease-out;
+  --motion-duration-cap-img: 450ms;
+  --motion-ease-cap-img: ease-out;
+  --motion-duration-cap-section: 400ms;
+  --motion-ease-cap-section: ease-out;
+  --motion-cap-stagger-step: 25ms;
+  --motion-cap-nav-hover-nudge: 2px;
+  --motion-cap-panel-shift-in: 8px;
+  --motion-cap-panel-shift-out: 6px;
+  --motion-cap-section-shift: 10px;
+  --cap-scroll-duration: 380ms;
+  --cap-scroll-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --cap-scroll-shift: 8px;
+}
+
+/* =========================
+   THEME — colors (default: industrial)
+========================= */
+
+:root,
+[data-theme="industrial"] {
+  /* Core semantic */
+  --bg-primary: #151515;
+  --bg-surface: #1c1c1c;
+  --bg-elevated: #232323;
+
+  --text-primary: #f5f5f5;
+  --text-secondary: #9ca3af;
+  --text-muted: #94a3b8;
+
+  --accent: rgba(91, 124, 156, 0.85);
+
+  --line-subtle: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.18);
+  --line-active: var(--accent);
+
+  --overlay-scrim: color-mix(in srgb, var(--bg-primary) 72%, transparent);
+
+  --gradient-hero-overlay: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--bg-primary) 85%, transparent) 0%,
+    color-mix(in srgb, var(--bg-primary) 75%, transparent) 35%,
+    color-mix(in srgb, var(--bg-primary) 50%, transparent) 60%,
+    color-mix(in srgb, var(--bg-primary) 30%, transparent) 100%
+  );
+
+  --text-nav-muted: color-mix(in srgb, var(--text-primary) 80%, transparent);
+  --text-decoration-muted: color-mix(in srgb, var(--text-primary) 55%, transparent);
+
+  --bg-ink: #0c0c0c;
+
+  --bg-band: #eceef2;
+  --bg-band-alt: #e2e5eb;
+  --text-on-band: #141414;
+  --text-on-band-muted: #4b5563;
+  --line-on-band: rgba(15, 23, 42, 0.12);
+  --text-eyebrow-on-band: color-mix(in srgb, var(--text-on-band) 45%, transparent);
+  --text-lead-emphasis-on-band: #111827;
+
+  --accent-on-band: #3d5a78;
+  --gradient-section-accent-on-band: linear-gradient(
+    180deg,
+    var(--accent-on-band),
+    color-mix(in srgb, var(--accent-on-band) 20%, transparent)
+  );
+
+  --text-on-elevated: #111111;
+
+  --shadow-soft: rgba(0, 0, 0, 0.12);
+  --shadow-medium: rgba(0, 0, 0, 0.14);
+  --shadow-subtle: rgba(0, 0, 0, 0.1);
+
+  --media-frame-bg: rgba(0, 0, 0, 0.35);
+  --media-frame-bg-light: rgba(255, 255, 255, 0.65);
+  --media-caption-fg: color-mix(in srgb, var(--text-primary) 55%, transparent);
+  --media-caption-bg: linear-gradient(transparent, color-mix(in srgb, var(--bg-primary) 65%, transparent));
+  --media-caption-fg-on-band: color-mix(in srgb, var(--text-on-band) 55%, transparent);
+  --media-caption-bg-on-band: linear-gradient(
+    transparent,
+    color-mix(in srgb, var(--text-on-band) 92%, transparent)
+  );
+  --media-placeholder-fg: color-mix(in srgb, var(--text-primary) 35%, transparent);
+  --media-placeholder-fg-on-band: color-mix(in srgb, var(--text-on-band) 40%, transparent);
+  --placeholder-surface: color-mix(in srgb, var(--text-on-band) 50%, transparent);
+  --placeholder-fg-on-band: color-mix(in srgb, var(--text-on-band) 45%, transparent);
+
+  --btn-primary-bg: color-mix(in srgb, var(--text-primary) 98%, transparent);
+  --btn-primary-bg-hover: var(--text-primary);
+  --btn-primary-fg: var(--text-on-elevated);
+  --btn-secondary-bg: color-mix(in srgb, var(--text-primary) 10%, transparent);
+  --btn-secondary-bg-hover: color-mix(in srgb, var(--text-primary) 18%, transparent);
+  --btn-secondary-fg: var(--text-primary);
+
+  --control-bg: color-mix(in srgb, var(--text-primary) 10%, transparent);
+  --control-bg-hover: color-mix(in srgb, var(--text-primary) 22%, transparent);
+  --control-fg: color-mix(in srgb, var(--text-primary) 95%, transparent);
+  --control-shadow: var(--shadow-soft);
+
+  --cap-seg-track-border: color-mix(in srgb, var(--text-primary) 10%, transparent);
+  --cap-seg-track-bg: color-mix(in srgb, var(--text-primary) 5%, transparent);
+  --cap-seg-face-bg: var(--text-primary);
+
+  --border-subtle: var(--line-subtle);
+}
+
+[data-theme="steel"] {
+  --bg-primary: #12161c;
+  --bg-surface: #1a2029;
+  --bg-elevated: #222a36;
+
+  --text-primary: #e8edf5;
+  --text-secondary: #94a3b8;
+  --text-muted: #7c8c9f;
+
+  --accent: rgba(100, 145, 195, 0.88);
+
+  --line-subtle: rgba(255, 255, 255, 0.07);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  --line-active: var(--accent);
+
+  --overlay-scrim: color-mix(in srgb, var(--bg-primary) 72%, transparent);
+
+  --gradient-hero-overlay: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--bg-primary) 85%, transparent) 0%,
+    color-mix(in srgb, var(--bg-primary) 75%, transparent) 35%,
+    color-mix(in srgb, var(--bg-primary) 50%, transparent) 60%,
+    color-mix(in srgb, var(--bg-primary) 30%, transparent) 100%
+  );
+
+  --text-nav-muted: color-mix(in srgb, var(--text-primary) 78%, transparent);
+  --text-decoration-muted: color-mix(in srgb, var(--text-primary) 52%, transparent);
+
+  --bg-ink: #0a0e14;
+
+  --bg-band: #e4e9f0;
+  --bg-band-alt: #d8dee8;
+  --text-on-band: #121a24;
+  --text-on-band-muted: #4a5568;
+  --line-on-band: rgba(15, 23, 42, 0.11);
+  --text-eyebrow-on-band: color-mix(in srgb, var(--text-on-band) 45%, transparent);
+  --text-lead-emphasis-on-band: #0f172a;
+
+  --accent-on-band: #355a7a;
+  --gradient-section-accent-on-band: linear-gradient(
+    180deg,
+    var(--accent-on-band),
+    color-mix(in srgb, var(--accent-on-band) 20%, transparent)
+  );
+
+  --text-on-elevated: #0f141c;
+
+  --shadow-soft: rgba(0, 0, 0, 0.11);
+  --shadow-medium: rgba(0, 0, 0, 0.13);
+  --shadow-subtle: rgba(0, 0, 0, 0.09);
+
+  --media-frame-bg: rgba(0, 0, 0, 0.38);
+  --media-frame-bg-light: rgba(255, 255, 255, 0.62);
+  --media-caption-fg: color-mix(in srgb, var(--text-primary) 55%, transparent);
+  --media-caption-bg: linear-gradient(transparent, color-mix(in srgb, var(--bg-primary) 65%, transparent));
+  --media-caption-fg-on-band: color-mix(in srgb, var(--text-on-band) 55%, transparent);
+  --media-caption-bg-on-band: linear-gradient(
+    transparent,
+    color-mix(in srgb, var(--text-on-band) 92%, transparent)
+  );
+  --media-placeholder-fg: color-mix(in srgb, var(--text-primary) 35%, transparent);
+  --media-placeholder-fg-on-band: color-mix(in srgb, var(--text-on-band) 40%, transparent);
+  --placeholder-surface: color-mix(in srgb, var(--text-on-band) 50%, transparent);
+  --placeholder-fg-on-band: color-mix(in srgb, var(--text-on-band) 45%, transparent);
+
+  --btn-primary-bg: color-mix(in srgb, var(--text-primary) 97%, transparent);
+  --btn-primary-bg-hover: var(--text-primary);
+  --btn-primary-fg: var(--text-on-elevated);
+  --btn-secondary-bg: color-mix(in srgb, var(--text-primary) 10%, transparent);
+  --btn-secondary-bg-hover: color-mix(in srgb, var(--text-primary) 18%, transparent);
+  --btn-secondary-fg: var(--text-primary);
+
+  --control-bg: color-mix(in srgb, var(--text-primary) 10%, transparent);
+  --control-bg-hover: color-mix(in srgb, var(--text-primary) 22%, transparent);
+  --control-fg: color-mix(in srgb, var(--text-primary) 95%, transparent);
+  --control-shadow: var(--shadow-soft);
+
+  --cap-seg-track-border: color-mix(in srgb, var(--text-primary) 10%, transparent);
+  --cap-seg-track-bg: color-mix(in srgb, var(--text-primary) 5%, transparent);
+  --cap-seg-face-bg: var(--text-primary);
+
+  --border-subtle: var(--line-subtle);
+}
+
+[data-theme="light"] {
+  --bg-primary: #eef0f4;
+  --bg-surface: #ffffff;
+  --bg-elevated: #f5f7fa;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+
+  --accent: rgba(55, 95, 140, 0.92);
+
+  --line-subtle: rgba(15, 23, 42, 0.08);
+  --line-strong: rgba(15, 23, 42, 0.16);
+  --line-active: var(--accent);
+
+  --overlay-scrim: color-mix(in srgb, var(--bg-primary) 55%, transparent);
+
+  --gradient-hero-overlay: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--text-primary) 35%, transparent) 0%,
+    color-mix(in srgb, var(--text-primary) 22%, transparent) 45%,
+    color-mix(in srgb, var(--text-primary) 10%, transparent) 100%
+  );
+
+  --text-nav-muted: color-mix(in srgb, var(--text-primary) 72%, transparent);
+  --text-decoration-muted: color-mix(in srgb, var(--text-primary) 45%, transparent);
+
+  --bg-ink: #0f172a;
+
+  --bg-band: #f8fafc;
+  --bg-band-alt: #f1f5f9;
+  --text-on-band: #0f172a;
+  --text-on-band-muted: #475569;
+  --line-on-band: rgba(15, 23, 42, 0.1);
+  --text-eyebrow-on-band: color-mix(in srgb, var(--text-on-band) 48%, transparent);
+  --text-lead-emphasis-on-band: #020617;
+
+  --accent-on-band: #2c4a6e;
+  --gradient-section-accent-on-band: linear-gradient(
+    180deg,
+    var(--accent-on-band),
+    color-mix(in srgb, var(--accent-on-band) 22%, transparent)
+  );
+
+  --text-on-elevated: #0f172a;
+
+  --shadow-soft: rgba(15, 23, 42, 0.08);
+  --shadow-medium: rgba(15, 23, 42, 0.12);
+  --shadow-subtle: rgba(15, 23, 42, 0.06);
+
+  --media-frame-bg: rgba(15, 23, 42, 0.06);
+  --media-frame-bg-light: rgba(255, 255, 255, 0.92);
+  --media-caption-fg: color-mix(in srgb, var(--text-primary) 62%, transparent);
+  --media-caption-bg: linear-gradient(transparent, color-mix(in srgb, var(--text-primary) 35%, transparent));
+  --media-caption-fg-on-band: color-mix(in srgb, var(--text-on-band) 58%, transparent);
+  --media-caption-bg-on-band: linear-gradient(
+    transparent,
+    color-mix(in srgb, var(--text-on-band) 88%, transparent)
+  );
+  --media-placeholder-fg: color-mix(in srgb, var(--text-primary) 45%, transparent);
+  --media-placeholder-fg-on-band: color-mix(in srgb, var(--text-on-band) 42%, transparent);
+  --placeholder-surface: color-mix(in srgb, var(--text-on-band) 12%, transparent);
+  --placeholder-fg-on-band: color-mix(in srgb, var(--text-on-band) 48%, transparent);
+
+  --btn-primary-bg: var(--text-primary);
+  --btn-primary-bg-hover: color-mix(in srgb, var(--text-primary) 92%, transparent);
+  --btn-primary-fg: var(--bg-surface);
+  --btn-secondary-bg: color-mix(in srgb, var(--text-primary) 8%, transparent);
+  --btn-secondary-bg-hover: color-mix(in srgb, var(--text-primary) 14%, transparent);
+  --btn-secondary-fg: var(--text-primary);
+
+  --control-bg: color-mix(in srgb, var(--text-primary) 8%, transparent);
+  --control-bg-hover: color-mix(in srgb, var(--text-primary) 14%, transparent);
+  --control-fg: var(--text-primary);
+  --control-shadow: var(--shadow-soft);
+
+  --cap-seg-track-border: color-mix(in srgb, var(--text-primary) 12%, transparent);
+  --cap-seg-track-bg: color-mix(in srgb, var(--text-primary) 5%, transparent);
+  --cap-seg-face-bg: var(--bg-surface);
+
+  --border-subtle: var(--line-subtle);
+}
+
+/* =========================
+   BASE
+========================= */
+
+.page-shell {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+html,
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+
+  line-height: 1.5;
+  font-weight: 400;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-size: 18px;
+  padding: 12px 24px;
+  background-color: var(--btn-secondary-bg);
+  border: 1px solid var(--line-strong);
+  color: var(--btn-secondary-fg);
+  font-weight: 300;
+  line-height: 1.6;
+  letter-spacing: 0.015em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--btn-secondary-bg-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px var(--shadow-soft);
+}
+
+/* =========================
+   TYPOGRAPHY
+========================= */
+
+h1 {
+  font-size: 30px;
+  letter-spacing: 0.3px;
+  padding-top: 0px;
+  margin-top: 0px;
+  font-weight: 500;
+}
+
+h2 {
+  font-size: clamp(1.8rem, 2.5vw, 2.2rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+p {
+  color: var(--text-secondary);
+  font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+  line-height: 1.6;
+  max-width: 60ch;
+}
+
+/* =========================
+   HERO VIDEO — staggered “assembly” reveal after video plays
+   (snappy motion + delays read as intentional, not slow loading)
+========================= */
+
+body:not(.hero-video-ready) header,
+body:not(.hero-video-ready) .hero-wrapper {
+  pointer-events: none;
+}
+
+body.hero-video-ready header,
+body.hero-video-ready .hero-wrapper {
+  pointer-events: auto;
+}
+
+/* Hidden state: pieces sit slightly below, ready to settle into place */
+body:not(.hero-video-ready) .header .logo,
+body:not(.hero-video-ready) .header .nav,
+body:not(.hero-video-ready) .header .btn.primary,
+body:not(.hero-video-ready) .hero-content h1,
+body:not(.hero-video-ready) .hero-content h2.hero-tagline,
+body:not(.hero-video-ready) .hero-content .hero-actions {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+}
+
+/* Reveal: header left-to-right, then hero top-to-bottom */
+body.hero-video-ready .header .logo,
+body.hero-video-ready .header .nav,
+body.hero-video-ready .header .btn.primary,
+body.hero-video-ready .hero-content h1,
+body.hero-video-ready .hero-content h2.hero-tagline,
+body.hero-video-ready .hero-content .hero-actions {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity var(--hero-intro-duration) var(--hero-intro-ease),
+    transform var(--hero-intro-duration) var(--hero-intro-ease);
+}
+
+body.hero-video-ready .header .logo {
+  transition-delay: 0ms;
+}
+
+body.hero-video-ready .header .nav {
+  transition-delay: 0.08s;
+}
+
+body.hero-video-ready .header .btn.primary {
+  transition-delay: 0.16s;
+}
+
+body.hero-video-ready .hero-content h1 {
+  transition-delay: 0.3s;
+}
+
+body.hero-video-ready .hero-content h2.hero-tagline {
+  transition-delay: 0.42s;
+}
+
+body.hero-video-ready .hero-content .hero-actions {
+  transition-delay: 0.54s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body:not(.hero-video-ready) .header .logo,
+  body:not(.hero-video-ready) .header .nav,
+  body:not(.hero-video-ready) .header .btn.primary,
+  body:not(.hero-video-ready) .hero-content h1,
+  body:not(.hero-video-ready) .hero-content h2.hero-tagline,
+  body:not(.hero-video-ready) .hero-content .hero-actions {
+    opacity: 1;
+    transform: none;
+  }
+
+  body.hero-video-ready .header .logo,
+  body.hero-video-ready .header .nav,
+  body.hero-video-ready .header .btn.primary,
+  body.hero-video-ready .hero-content h1,
+  body.hero-video-ready .hero-content h2.hero-tagline,
+  body.hero-video-ready .hero-content .hero-actions {
+    transition: none;
+    transition-delay: 0ms;
+  }
+
+  body:not(.hero-video-ready) header,
+  body:not(.hero-video-ready) .hero-wrapper {
+    pointer-events: auto;
+  }
+}
+
+/* =========================
+   LAYOUT SYSTEM
+========================= */
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+
+  padding-left: clamp(1.5rem, 5vw, 6rem);
+  padding-right: clamp(1.5rem, 5vw, 6rem);
+}
+
+/* Capabilities showcase: wide canvas, system padding token */
+.container--showcase {
+  max-width: var(--container-showcase-max);
+  padding-left: var(--container-inline-padding);
+  padding-right: var(--container-inline-padding);
+}
+
+.section {
+  padding: var(--space-section) 0;
+}
+
+/* subtle section contrast */
+.section.alt {
+  background: var(--bg-surface);
+}
+
+/* =========================
+   SECTION BANDS — light/dark alternation + structure
+   (dividers, splits, media slots)
+========================= */
+
+.section-band {
+  position: relative;
+  border-top: 1px solid var(--line-subtle);
+}
+
+.section-band--dark {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.section-band--ink {
+  background: var(--bg-ink);
+  color: var(--text-primary);
+}
+
+.section-band--light {
+  background: var(--bg-band);
+  color: var(--text-on-band);
+  border-top-color: var(--line-on-band);
+}
+
+.section-band--light-alt {
+  background: var(--bg-band-alt);
+  color: var(--text-on-band);
+  border-top-color: var(--line-on-band);
+}
+
+.section-band--light-alt h2,
+.section-band--light-alt h3 {
+  color: var(--text-on-band);
+}
+
+.section-band--light-alt p,
+.section-band--light-alt li {
+  color: var(--text-on-band-muted);
+}
+
+.section-band--light-alt strong {
+  color: var(--text-on-band);
+}
+
+.section-band--light h2,
+.section-band--light h3 {
+  color: var(--text-on-band);
+}
+
+.section-band--light p,
+.section-band--light li {
+  color: var(--text-on-band-muted);
+}
+
+.section-band--light strong {
+  color: var(--text-on-band);
+}
+
+.section-band--light .problem-eyebrow,
+.section-band--light .solution-eyebrow,
+.section-band--light .cap-eyebrow,
+.section-band--light .proof-label,
+.section-band--light .cert-eyebrow,
+.section-band--light .testimonial-eyebrow,
+.section-band--light-alt .problem-eyebrow,
+.section-band--light-alt .solution-eyebrow,
+.section-band--light-alt .cap-eyebrow,
+.section-band--light-alt .proof-label,
+.section-band--light-alt .cert-eyebrow,
+.section-band--light-alt .testimonial-eyebrow {
+  color: var(--text-eyebrow-on-band);
+}
+
+.section-band--light .solution-points__lead,
+.section-band--light .problem-points__lead,
+.section-band--light-alt .solution-points__lead,
+.section-band--light-alt .problem-points__lead {
+  color: var(--text-lead-emphasis-on-band);
+}
+
+/* Horizontal rule between content blocks */
+.section-hr {
+  height: 1px;
+  margin: clamp(2rem, 4vw, 3rem) 0;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--line-subtle) 20%,
+    var(--line-subtle) 80%,
+    transparent 100%
+  );
+}
+
+.section-band--light .section-hr {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--line-on-band) 15%,
+    var(--line-on-band) 85%,
+    transparent 100%
+  );
+}
+
+/* Subtle grid texture (dark sections) */
+.section-band--grid {
+  background-color: var(--bg-primary);
+  background-image:
+    linear-gradient(var(--line-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line-subtle) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Two-column split — single system for media + sidebar layouts */
+.layout-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: var(--layout-split-gap);
+  align-items: center;
+}
+
+/* Capabilities: fixed nav column + fluid panel */
+.layout-split--sidebar {
+  grid-template-columns: 220px minmax(0, 1fr);
+  align-items: start;
+}
+
+.layout-split--capabilities.layout-split--sidebar {
+  grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+  align-items: start;
+}
+
+/* Image right (default DOM: text, then media) */
+.layout-split--media-right .layout-split__media {
+  min-height: 0;
+}
+
+/* Image left on large screens; readable order on small */
+.layout-split--media-left .layout-split__media {
+  order: -1;
+}
+
+@media (max-width: 960px) {
+  .layout-split {
+    grid-template-columns: 1fr;
+  }
+
+  .layout-split--media-left .layout-split__text {
+    order: 1;
+  }
+
+  .layout-split--media-left .layout-split__media {
+    order: 2;
+  }
+}
+
+.layout-split__sidebar {
+  min-width: 0;
+}
+
+.layout-split__content {
+  min-width: 0;
+}
+
+/* Capabilities: stack earlier than generic split, token-driven gap */
+@media (max-width: 1023px) {
+  .layout-split--capabilities.layout-split--sidebar {
+    grid-template-columns: 1fr;
+    gap: var(--space-stack-major-lg);
+    align-items: stretch;
+  }
+}
+
+/* Vertical accent beside text */
+.section-accent {
+  position: relative;
+  padding-left: clamp(1rem, 2vw, 1.35rem);
+}
+
+.section-accent::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  bottom: 0.15em;
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(
+    180deg,
+    var(--line-active),
+    color-mix(in srgb, var(--line-active) 18%, transparent)
+  );
+}
+
+.section-band--light .section-accent::before {
+  background: var(--gradient-section-accent-on-band);
+}
+
+/* Image / placeholder frame */
+.media-frame {
+  position: relative;
+  margin: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--media-frame-bg);
+  border: 1px solid var(--line-strong);
+  aspect-ratio: 4 / 3;
+}
+
+.section-band--light .media-frame {
+  background: var(--media-frame-bg-light);
+  border-color: var(--line-on-band);
+}
+
+.media-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Container hugs image intrinsic ratio (owner portrait, etc.) */
+.media-frame--natural {
+  aspect-ratio: auto;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.media-frame--natural img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.media-frame__caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--media-caption-fg);
+  background: var(--media-caption-bg);
+}
+
+.section-band--light .media-frame__caption {
+  color: var(--media-caption-fg-on-band);
+  background: var(--media-caption-bg-on-band);
+}
+
+/* Empty placeholder (swap for your asset) */
+.media-frame--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(200px, 32vw, 320px);
+  aspect-ratio: 4 / 3;
+}
+
+.media-frame--empty .media-frame__placeholder-label {
+  position: static;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--media-placeholder-fg);
+  background: none;
+}
+
+.section-band--light .media-frame--empty .media-frame__placeholder-label {
+  color: var(--media-placeholder-fg-on-band);
+}
+
+/* Logo / cert placeholders */
+.placeholder-logo {
+  min-height: 52px;
+  min-width: 120px;
+  padding: 1rem 1.25rem;
+  border: 1px dashed var(--line-on-band);
+  border-radius: 4px;
+  background: var(--placeholder-surface);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--placeholder-fg-on-band);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Testimonial quote bar */
+.testimonial-bar {
+  border-left: 3px solid var(--line-active);
+  padding-left: clamp(1.25rem, 3vw, 2rem);
+}
+
+.section-band--light .testimonial-bar,
+.section-band--light-alt .testimonial-bar {
+  border-left-color: var(--accent-on-band);
+}
+
+/* =========================
+   BUTTON SYSTEM
+========================= */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 12px 24px;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.6;
+  letter-spacing: 0.015em;
+  text-decoration: none;
+
+  border-radius: 4px;
+  cursor: pointer;
+  border: 0 solid transparent;
+
+  transition: all 0.3s ease;
+}
+
+.btn.primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-fg);
+}
+
+.btn.secondary {
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-fg);
+  border: 1px solid var(--line-strong);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px var(--shadow-subtle);
+}
+
+.btn.primary:hover {
+  filter: brightness(1.04);
+  background: var(--btn-primary-bg-hover);
+  box-shadow: 0 6px 18px var(--shadow-medium);
+}
+
+.btn.secondary:hover {
+  background: var(--btn-secondary-bg-hover);
+  border-color: color-mix(in srgb, var(--line-strong) 55%, var(--text-primary));
+  filter: brightness(1.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn:hover,
+  .btn.primary:hover,
+  .btn.secondary:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn.primary:hover {
+    filter: brightness(1.06);
+  }
+
+  .btn.secondary:hover {
+    filter: none;
+  }
+}
+
+/* =========================
+   UTILITY (VERY MINIMAL)
+========================= */
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+/* Capability nav tabs — override global `button` / `button:hover` */
+button.cap-nav-tab {
+  background: none;
+  border: none;
+  box-shadow: none;
+
+  display: block;
+  width: 100%;
+  text-align: left;
+
+  font-size: 18px;
+  line-height: 1.6;
+  letter-spacing: 0.015em;
+
+  color: color-mix(in srgb, var(--text-muted) 72%, transparent);
+  padding: var(--cap-nav-tab-pad-y) 0;
+  padding-left: calc(var(--cap-nav-tab-pad-x) - var(--cap-nav-tab-indicator));
+  border-left: var(--cap-nav-tab-indicator) solid transparent;
+
+  cursor: pointer;
+  transition:
+    color var(--motion-duration-cap-nav) var(--motion-ease-cap-nav),
+    border-color var(--motion-duration-cap-nav) var(--motion-ease-cap-nav),
+    transform var(--motion-duration-cap-nav) var(--motion-ease-cap-nav);
+
+  box-sizing: border-box;
+  margin: 0;
+  font-family: inherit;
+  font-weight: 300;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+  outline: none;
+}
+
+button.cap-nav-tab:hover {
+  color: color-mix(in srgb, var(--text-secondary) 92%, transparent);
+  background: none;
+  box-shadow: none;
+}
+
+button.cap-nav-tab:not(.cap-nav-tab--active):hover {
+  transform: translateX(var(--motion-cap-nav-hover-nudge));
+}
+
+button.cap-nav-tab:focus-visible {
+  outline: 2px solid var(--line-strong);
+  outline-offset: 2px;
+}
+
+button.cap-nav-tab.cap-nav-tab--active {
+  color: var(--text-primary);
+  border-left-color: var(--line-active);
+}
+
+button.cap-nav-tab.cap-nav-tab--active:hover {
+  color: var(--text-primary);
+  background: none;
+  transform: none;
+  box-shadow: none;
+}
+
+@media (max-width: 1023px) {
+  .layout-split--capabilities button.cap-nav-tab {
+    width: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button.cap-nav-tab {
+    transition: none;
+    transform: none;
+  }
+}

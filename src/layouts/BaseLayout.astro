@@ -1,0 +1,55 @@
+---
+import "../styles/global.css";
+import Header from "../components/Header.astro";
+import SocialRail from "../components/SocialRail.astro";
+---
+
+<html lang="en" data-theme="industrial">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Premacor</title>
+  </head>
+  <body>
+    <Header />
+    <div class="page-shell">
+      <slot />
+      <SocialRail />
+    </div>
+    <script is:inline>
+      (function () {
+        function reveal() {
+          document.body.classList.add("hero-video-ready");
+        }
+        function init() {
+          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            reveal();
+            return;
+          }
+          var video = document.querySelector(".hero-video");
+          if (!video) {
+            reveal();
+            return;
+          }
+          /* Brief beat of video, then staggered build (tune if it feels slow) */
+          var introDelayMs = 1100;
+          function revealAfterIntro() {
+            setTimeout(reveal, introDelayMs);
+          }
+          video.addEventListener("playing", revealAfterIntro, { once: true });
+          video.addEventListener("error", reveal, { once: true });
+          if (!video.paused) {
+            revealAfterIntro();
+            return;
+          }
+          setTimeout(reveal, 10000);
+        }
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", init);
+        } else {
+          init();
+        }
+      })();
+    </script>
+  </body>
+</html>

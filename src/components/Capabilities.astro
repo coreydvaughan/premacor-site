@@ -1,0 +1,37 @@
+---
+import CapabilitiesShowcase from "./capabilities/CapabilitiesShowcase.astro";
+---
+
+<section class="section section-band capabilities">
+  <div class="container container--showcase">
+    <CapabilitiesShowcase />
+  </div>
+</section>
+
+<style>
+  /* Section wrapper: band + container only — colors use global tokens */
+  .capabilities {
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+  }
+
+  .capabilities :where(h1, h2, h3, h4, h5, h6) {
+    color: var(--text-primary);
+  }
+
+  .capabilities :where(p, li, dd, td, blockquote) {
+    color: var(--text-secondary);
+  }
+
+  .capabilities :where(small, .cap-eyebrow, [data-text-tone="secondary"]) {
+    color: var(--text-muted);
+  }
+
+  .capabilities :where(a) {
+    color: var(--text-secondary);
+  }
+
+  .capabilities :where(a:hover) {
+    color: var(--text-primary);
+  }
+</style>
