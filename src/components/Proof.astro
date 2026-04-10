@@ -63,8 +63,8 @@
 
   .proof-label {
     display: block;
-    margin-bottom: 12px;
-    font-size: 0.8rem;
+    margin-bottom: var(--space-3);
+    font-size: var(--text-label);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-secondary);
@@ -74,12 +74,12 @@
     margin-top: var(--space-element);
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    gap: calc(var(--space-1) * 0.8);
   }
 
   .proof-founder span {
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: var(--text-ui);
   }
 
   .proof-quote {

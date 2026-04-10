@@ -69,11 +69,11 @@
     position: relative;
     z-index: 2;
     width: 100%;
-    max-width: min(1600px, calc(100vw - 1rem));
+    max-width: min(1600px, calc(100vw - var(--space-4)));
     margin-left: auto;
     margin-right: auto;
-    padding-left: clamp(0.5rem, 1.25vw, 1.25rem);
-    padding-right: clamp(0.5rem, 1.25vw, 1.25rem);
+    padding-left: var(--hero-wrapper-padding-x);
+    padding-right: var(--hero-wrapper-padding-x);
     box-sizing: border-box;
   }
 
@@ -84,7 +84,7 @@
   }
 
   .hero-content h1 {
-    margin-bottom: clamp(1.2rem, 2vw, 1.8rem);
+    margin-bottom: var(--hero-h1-margin-bottom);
   }
 
   .hero-rotating-line {
@@ -102,12 +102,12 @@
   }
 
   .hero-content h2.hero-tagline {
-    margin-bottom: clamp(1.5rem, 2.5vw, 2.2rem);
+    margin-bottom: var(--hero-tagline-margin-bottom);
     max-width: 52ch;
   }
 
   .hero-actions {
-    margin-top: clamp(1.5rem, 2.5vw, 2.5rem);
+    margin-top: var(--hero-actions-margin-top);
   }
 </style>
 
@@ -140,11 +140,11 @@
     position: relative;
     z-index: 2;
     width: 100%;
-    max-width: min(1600px, calc(100vw - 1rem));
+    max-width: min(1600px, calc(100vw - var(--space-4)));
     margin-left: auto;
     margin-right: auto;
-    padding-left: clamp(0.5rem, 1.25vw, 1.25rem);
-    padding-right: clamp(0.5rem, 1.25vw, 1.25rem);
+    padding-left: var(--hero-wrapper-padding-x);
+    padding-right: var(--hero-wrapper-padding-x);
     box-sizing: border-box;
   }
 
@@ -184,11 +184,11 @@
     position: relative;
     z-index: 2;
     width: 100%;
-    max-width: min(1600px, calc(100vw - 1rem));
+    max-width: min(1600px, calc(100vw - var(--space-4)));
     margin-left: auto;
     margin-right: auto;
-    padding-left: clamp(0.5rem, 1.25vw, 1.25rem);
-    padding-right: clamp(0.5rem, 1.25vw, 1.25rem);
+    padding-left: var(--hero-wrapper-padding-x);
+    padding-right: var(--hero-wrapper-padding-x);
     box-sizing: border-box;
   }
 

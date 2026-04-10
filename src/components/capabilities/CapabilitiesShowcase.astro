@@ -5,13 +5,13 @@ import { data, tabLabels } from "./data";
 <div class="cap-showcase" data-cap-showcase>
   <header class="cap-showcase__intro cap-scroll-group">
     <h2
-      class="cap-showcase__intro-title cap-scroll-presence text-3xl font-semibold tracking-tight md:text-4xl"
+      class="cap-showcase__intro-title cap-scroll-presence"
       style="--cap-scroll-delay: 0ms"
     >
       Built for Production. Engineered for Scale.
     </h2>
     <p
-      class="cap-showcase__intro-lead cap-scroll-presence text-base leading-relaxed"
+      class="cap-showcase__intro-lead cap-scroll-presence"
       style="--cap-scroll-delay: 26ms"
     >
       Explore how we translate proven designs into stable manufacturing—by capability or by where
@@ -19,29 +19,29 @@ import { data, tabLabels } from "./data";
     </p>
   </header>
 
-  <div role="radiogroup" aria-label="Capability view" class="cap-seg cap-showcase__stack flex w-full max-w-lg flex-col">
-    <div class="cap-seg__track inline-flex rounded-full">
-      <label class="cap-seg__item relative flex flex-1 cursor-pointer select-none items-center justify-center rounded-full">
+  <div role="radiogroup" aria-label="Capability view" class="cap-seg cap-showcase__stack">
+    <div class="cap-seg__track">
+      <label class="cap-seg__item">
         <input
           type="radio"
           name="cap-showcase-category"
           value="services"
-          class="peer sr-only"
+          class="cap-sr-only"
           checked
           data-cap-cat
         />
-        <span class="cap-seg__face pointer-events-none absolute inset-0 rounded-full" aria-hidden="true"></span>
-        <span class="cap-seg__text relative z-[1]">Services</span>
+        <span class="cap-seg__face" aria-hidden="true"></span>
+        <span class="cap-seg__text">Services</span>
       </label>
-      <label class="cap-seg__item relative flex flex-1 cursor-pointer select-none items-center justify-center rounded-full">
-        <input type="radio" name="cap-showcase-category" value="useCases" class="peer sr-only" data-cap-cat />
-        <span class="cap-seg__face pointer-events-none absolute inset-0 rounded-full" aria-hidden="true"></span>
-        <span class="cap-seg__text relative z-[1]">Use Cases</span>
+      <label class="cap-seg__item">
+        <input type="radio" name="cap-showcase-category" value="useCases" class="cap-sr-only" data-cap-cat />
+        <span class="cap-seg__face" aria-hidden="true"></span>
+        <span class="cap-seg__text">Use Cases</span>
       </label>
     </div>
   </div>
 
-  <div class="hidden md:block">
+  <div class="cap-showcase__desktop">
     <div class="layout-split layout-split--sidebar layout-split--capabilities cap-showcase__split-after-seg">
       <aside class="layout-split__sidebar">
         <nav aria-label="Capability topics">
@@ -52,13 +52,13 @@ import { data, tabLabels } from "./data";
       </aside>
 
       <div class="layout-split__content">
-        <div role="tabpanel" tabindex="0" data-cap-panel class="outline-none"></div>
+        <div role="tabpanel" tabindex="0" data-cap-panel class="cap-panel-tabpanel"></div>
       </div>
     </div>
   </div>
 
   <div
-    class="cap-accordion block md:hidden cap-showcase__split-after-seg"
+    class="cap-accordion cap-showcase__split-after-seg"
     data-cap-accordion
     aria-label="Capability details"
   ></div>
@@ -108,7 +108,7 @@ import { data, tabLabels } from "./data";
     const bullets = entry.bullets
       .map(
         (b) =>
-          `<li class="cap-panel__bullet text-sm leading-relaxed">${escapeHtml(b)}</li>`
+          `<li class="cap-panel__bullet">${escapeHtml(b)}</li>`
       )
       .join("");
     return (
@@ -117,15 +117,15 @@ import { data, tabLabels } from "./data";
       `<div class="cap-panel-motion cap-scroll-group" data-cap-panel-motion>` +
       `<div class="cap-panel__layout">` +
       `<div class="cap-panel__copy">` +
-      `<h3 class="cap-panel__title cap-scroll-presence text-xl font-semibold tracking-tight md:text-[1.375rem]" style="--cap-scroll-delay: 0ms">${escapeHtml(entry.title)}</h3>` +
-      `<p class="cap-panel__desc cap-scroll-presence text-base leading-relaxed" style="--cap-scroll-delay: 23ms">${escapeHtml(entry.description)}</p>` +
+      `<h3 class="cap-panel__title cap-scroll-presence" style="--cap-scroll-delay: 0ms">${escapeHtml(entry.title)}</h3>` +
+      `<p class="cap-panel__desc cap-scroll-presence" style="--cap-scroll-delay: 23ms">${escapeHtml(entry.description)}</p>` +
       `<ul class="cap-panel__bullets cap-scroll-presence" style="--cap-scroll-delay: 47ms">${bullets}</ul>` +
       `</div>` +
       `<div class="cap-panel__media">` +
       `<div class="cap-panel-media cap-scroll-presence" style="--cap-scroll-delay: 72ms">` +
       `<figure class="cap-panel__figure">` +
       `<img src="${escapeHtml(entry.image)}" alt="" width="1024" height="640" loading="lazy" decoding="async" class="cap-panel__img" />` +
-      `<figcaption class="sr-only">${escapeHtml(entry.title)}</figcaption>` +
+      `<figcaption class="cap-sr-only">${escapeHtml(entry.title)}</figcaption>` +
       `</figure>` +
       `</div>` +
       `</div>` +
@@ -145,7 +145,7 @@ import { data, tabLabels } from "./data";
     const bullets = entry.bullets
       .map(
         (b) =>
-          `<li class="cap-panel__bullet text-sm leading-relaxed">${escapeHtml(b)}</li>`
+          `<li class="cap-panel__bullet">${escapeHtml(b)}</li>`
       )
       .join("");
     return (
@@ -154,15 +154,15 @@ import { data, tabLabels } from "./data";
       `<div class="cap-accordion-panel-inner">` +
       `<div class="cap-panel__layout">` +
       `<div class="cap-panel__copy">` +
-      `<h3 class="cap-panel__title text-xl font-semibold tracking-tight">${escapeHtml(entry.title)}</h3>` +
-      `<p class="cap-panel__desc text-base leading-relaxed">${escapeHtml(entry.description)}</p>` +
+      `<h3 class="cap-panel__title">${escapeHtml(entry.title)}</h3>` +
+      `<p class="cap-panel__desc">${escapeHtml(entry.description)}</p>` +
       `<ul class="cap-panel__bullets">${bullets}</ul>` +
       `</div>` +
       `<div class="cap-panel__media">` +
       `<div class="cap-panel-media">` +
       `<figure class="cap-panel__figure">` +
       `<img src="${escapeHtml(entry.image)}" alt="" width="1024" height="640" loading="lazy" decoding="async" class="cap-panel__img" />` +
-      `<figcaption class="sr-only">${escapeHtml(entry.title)}</figcaption>` +
+      `<figcaption class="cap-sr-only">${escapeHtml(entry.title)}</figcaption>` +
       `</figure>` +
       `</div>` +
       `</div>` +
@@ -472,11 +472,79 @@ import { data, tabLabels } from "./data";
   }
 
   .cap-showcase__intro-title {
+    margin: 0;
     color: var(--text-primary);
+    font-size: 1.875rem;
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.025em;
+  }
+
+  @media (min-width: 768px) {
+    .cap-showcase__intro-title {
+      font-size: 2.25rem;
+    }
   }
 
   .cap-showcase__intro-lead {
+    margin: 0;
     color: var(--text-secondary);
+    font-size: var(--text-md);
+    line-height: 1.625;
+  }
+
+  .cap-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  :global(.cap-sr-only) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .cap-seg {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 32rem;
+  }
+
+  .cap-showcase__desktop {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .cap-showcase__desktop {
+      display: block;
+    }
+  }
+
+  .cap-accordion {
+    display: block;
+  }
+
+  @media (min-width: 768px) {
+    .cap-accordion {
+      display: none;
+    }
+  }
+
+  .cap-panel-tabpanel {
+    outline: none;
   }
 
   /* Scroll presence — IO targets .cap-scroll-group; .is-revealed on children (stagger via --cap-scroll-delay) */
@@ -682,17 +750,33 @@ import { data, tabLabels } from "./data";
     margin: 0;
   }
 
-  .cap-panel__desc {
-    max-width: min(var(--measure-cap-desc), 100%);
-    color: var(--text-secondary);
-  }
-
-  .cap-panel__title {
+  /* Injected panel typography (innerHTML — :global so rules apply) */
+  :global(.cap-panel__title) {
+    margin: 0;
     color: var(--text-primary);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-semibold);
+    letter-spacing: -0.025em;
   }
 
-  .cap-panel__bullet {
+  @media (min-width: 768px) {
+    :global(.cap-panel:not(.cap-panel--accordion) .cap-panel__title) {
+      font-size: 1.375rem;
+    }
+  }
+
+  :global(.cap-panel__desc) {
+    max-width: min(var(--measure-cap-desc), 100%);
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: var(--text-md);
+    line-height: 1.625;
+  }
+
+  :global(.cap-panel__bullet) {
     color: var(--text-muted);
+    font-size: var(--text-sm);
+    line-height: 1.625;
   }
 
   @media (max-width: 1023px) {
@@ -711,25 +795,41 @@ import { data, tabLabels } from "./data";
   }
 
   .cap-seg__track {
+    display: inline-flex;
+    border-radius: 9999px;
     padding: var(--cap-seg-track-padding);
     border: 1px solid var(--cap-seg-track-border);
     background: var(--cap-seg-track-bg);
   }
 
   .cap-seg__item {
+    position: relative;
+    display: flex;
+    flex: 1 1 0%;
     min-height: var(--cap-seg-item-min-height);
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    cursor: pointer;
+    user-select: none;
   }
 
   .cap-seg__text {
+    position: relative;
+    z-index: 1;
     padding: var(--cap-seg-label-padding-y) var(--cap-seg-label-padding-x);
-    font-size: 18px;
+    font-size: var(--text-lg);
     font-weight: 300;
     letter-spacing: 0.015em;
-    line-height: 1.6;
+    line-height: var(--leading-relaxed);
     transition: color 0.2s ease;
   }
 
   .cap-seg__face {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
     transition: background 0.2s ease;
   }
 
@@ -787,11 +887,11 @@ import { data, tabLabels } from "./data";
     min-height: 56px;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
+    gap: var(--space-4);
     margin: 0;
-    padding: 0 clamp(1rem, 4vw, 1.25rem);
+    padding: 0 clamp(var(--space-4), 4vw, calc(var(--space-1) * 5));
     font-family: inherit;
-    font-size: 0.9375rem;
+    font-size: var(--text-accordion-trigger);
     font-weight: 600;
     letter-spacing: -0.01em;
     line-height: 1.3;
@@ -858,7 +958,7 @@ import { data, tabLabels } from "./data";
     box-sizing: border-box;
     overflow: hidden;
     width: 100%;
-    padding: 0 clamp(1rem, 4vw, 1.25rem) 1rem;
+    padding: 0 clamp(var(--space-4), 4vw, calc(var(--space-1) * 5)) var(--space-4);
   }
 
   /* Panel markup inside accordion (injected) — layout + no heavy card chrome */
@@ -903,19 +1003,6 @@ import { data, tabLabels } from "./data";
 
   :global(.cap-accordion .cap-panel__copy > *) {
     margin: 0;
-  }
-
-  :global(.cap-accordion .cap-panel__desc) {
-    max-width: min(var(--measure-cap-desc), 100%);
-    color: var(--text-secondary);
-  }
-
-  :global(.cap-accordion .cap-panel__title) {
-    color: var(--text-primary);
-  }
-
-  :global(.cap-accordion .cap-panel__bullet) {
-    color: var(--text-muted);
   }
 
   :global(.cap-accordion .cap-panel__bullets) {

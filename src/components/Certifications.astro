@@ -1,7 +1,7 @@
 <section class="section section-band section-band--light certifications">
   <div class="container">
     <div class="certifications-head">
-      <p class="cert-eyebrow">Quality & compliance</p>
+      <p class="eyebrow cert-eyebrow">Quality & compliance</p>
       <h2>Certifications</h2>
       <p class="cert-lead">
         Drop your ISO and partner badges here—placeholders below show approximate size and rhythm.
@@ -24,16 +24,11 @@
   }
 
   .cert-eyebrow {
-    margin: 0 0 0.65rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
     color: var(--text-eyebrow-on-band);
   }
 
   .cert-lead {
-    margin-top: 0.75rem;
+    margin-top: var(--space-3);
   }
 
   .certifications-inner {
@@ -41,6 +36,6 @@
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: stretch;
-    gap: clamp(1rem, 2vw, 1.5rem);
+    gap: clamp(var(--space-4), 2vw, var(--space-5));
   }
 </style>

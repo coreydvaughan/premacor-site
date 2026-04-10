@@ -1,7 +1,7 @@
 <section class="section section-band section-band--light-alt testimonial">
   <div class="container">
     <div class="testimonial-inner">
-      <p class="testimonial-eyebrow">What partners say</p>
+      <p class="eyebrow testimonial-eyebrow">What partners say</p>
       <blockquote class="testimonial-bar testimonial-content">
         <p class="testimonial-quote">
           Premacor delivers consistent, high-quality parts with the reliability required for
@@ -21,11 +21,7 @@
   }
 
   .testimonial-eyebrow {
-    margin: 0 0 1rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    margin: 0 0 var(--space-4);
     color: var(--text-eyebrow-on-band);
   }
 
@@ -37,7 +33,7 @@
 
   .testimonial-quote {
     margin: 0;
-    font-size: clamp(1.15rem, 2vw, 1.35rem);
+    font-size: var(--text-quote);
     line-height: 1.55;
     font-style: normal;
     color: var(--text-on-band);
@@ -45,8 +41,8 @@
 
   .testimonial-source {
     display: block;
-    margin-top: 1.25rem;
-    font-size: 0.9rem;
+    margin-top: calc(var(--space-1) * 5);
+    font-size: var(--text-ui);
     font-style: normal;
     color: var(--text-on-band-muted);
   }
