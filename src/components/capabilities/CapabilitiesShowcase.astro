@@ -41,19 +41,27 @@ import { data, tabLabels } from "./data";
     </div>
   </div>
 
-  <div class="layout-split layout-split--sidebar layout-split--capabilities cap-showcase__split-after-seg">
-    <aside class="layout-split__sidebar">
-      <nav aria-label="Capability topics">
-        <div class="cap-nav-wrap">
-          <div class="cap-nav-tablist" role="tablist" aria-orientation="vertical" data-cap-tablist></div>
-        </div>
-      </nav>
-    </aside>
+  <div class="hidden md:block">
+    <div class="layout-split layout-split--sidebar layout-split--capabilities cap-showcase__split-after-seg">
+      <aside class="layout-split__sidebar">
+        <nav aria-label="Capability topics">
+          <div class="cap-nav-wrap">
+            <div class="cap-nav-tablist" role="tablist" aria-orientation="vertical" data-cap-tablist></div>
+          </div>
+        </nav>
+      </aside>
 
-    <div class="layout-split__content">
-      <div role="tabpanel" tabindex="0" data-cap-panel class="outline-none"></div>
+      <div class="layout-split__content">
+        <div role="tabpanel" tabindex="0" data-cap-panel class="outline-none"></div>
+      </div>
     </div>
   </div>
+
+  <div
+    class="cap-accordion block md:hidden cap-showcase__split-after-seg"
+    data-cap-accordion
+    aria-label="Capability details"
+  ></div>
 
   <p class="cap-showcase__stack--cta">
     <a href="#" class="btn primary">Start Your Project</a>
@@ -74,6 +82,10 @@ import { data, tabLabels } from "./data";
   /** @type {"services" | "useCases"} */
   let activeCategory = "services";
   let activeTab = "cnc-machining";
+
+  /** Mobile accordion only: which items are expanded (independent of desktop `activeTab`). */
+  /** @type {Set<string>} */
+  const openItems = new Set();
 
   /** @returns {CapabilityEntry[]} */
   function items() {
@@ -122,6 +134,74 @@ import { data, tabLabels } from "./data";
       `</div>` +
       `</div>`
     );
+  }
+
+  /**
+   * Mobile accordion only: same information as `renderPanelHtml` without scroll-presence /
+   * motion wrappers so progressive disclosure stays predictable (desktop unchanged).
+   * @param {CapabilityEntry} entry
+   */
+  function renderAccordionPanelHtml(entry) {
+    const bullets = entry.bullets
+      .map(
+        (b) =>
+          `<li class="cap-panel__bullet text-sm leading-relaxed">${escapeHtml(b)}</li>`
+      )
+      .join("");
+    return (
+      `<div class="cap-panel cap-panel--accordion">` +
+      `<div class="cap-panel-surface">` +
+      `<div class="cap-accordion-panel-inner">` +
+      `<div class="cap-panel__layout">` +
+      `<div class="cap-panel__copy">` +
+      `<h3 class="cap-panel__title text-xl font-semibold tracking-tight">${escapeHtml(entry.title)}</h3>` +
+      `<p class="cap-panel__desc text-base leading-relaxed">${escapeHtml(entry.description)}</p>` +
+      `<ul class="cap-panel__bullets">${bullets}</ul>` +
+      `</div>` +
+      `<div class="cap-panel__media">` +
+      `<div class="cap-panel-media">` +
+      `<figure class="cap-panel__figure">` +
+      `<img src="${escapeHtml(entry.image)}" alt="" width="1024" height="640" loading="lazy" decoding="async" class="cap-panel__img" />` +
+      `<figcaption class="sr-only">${escapeHtml(entry.title)}</figcaption>` +
+      `</figure>` +
+      `</div>` +
+      `</div>` +
+      `</div>` +
+      `</div>` +
+      `</div>` +
+      `</div>`
+    );
+  }
+
+  /**
+   * Mobile: one row per capability; full panel markup only for slugs in `openItems`.
+   * @param {HTMLElement} root
+   */
+  function renderAccordion(root) {
+    const acc = root.querySelector("[data-cap-accordion]");
+    if (!acc) return;
+
+    const list = items();
+
+    acc.innerHTML = list
+      .map((row) => {
+        const expanded = openItems.has(row.slug);
+        const panelId = `cap-acc-panel-${row.slug}`;
+        const triggerId = `cap-acc-trigger-${row.slug}`;
+        const inner = expanded ? renderAccordionPanelHtml(row) : "";
+        return (
+          `<div class="cap-accordion__item${expanded ? " is-open" : ""}" data-cap-acc-item data-slug="${escapeHtml(row.slug)}">` +
+          `<button type="button" class="cap-accordion__trigger" id="${triggerId}" aria-expanded="${expanded ? "true" : "false"}" aria-controls="${panelId}">` +
+          `<span class="cap-accordion__trigger-text">${escapeHtml(tabLabel(row.slug))}</span>` +
+          `<span class="cap-accordion__chevron" aria-hidden="true"></span>` +
+          `</button>` +
+          `<div class="cap-accordion__region" id="${panelId}" role="region" aria-labelledby="${triggerId}" aria-hidden="${expanded ? "false" : "true"}">` +
+          `<div class="cap-accordion__content">` +
+          inner +
+          `</div></div></div>`
+        );
+      })
+      .join("");
   }
 
   /** @param {HTMLElement} panel */
@@ -203,6 +283,15 @@ import { data, tabLabels } from "./data";
   }
 
   /** @param {HTMLElement} root */
+  function syncCategoryRadios(root) {
+    root.querySelectorAll("[data-cap-cat]").forEach((input) => {
+      if (input instanceof HTMLInputElement) {
+        input.checked = input.value === activeCategory;
+      }
+    });
+  }
+
+  /** @param {HTMLElement} root */
   function render(root) {
     const tablist = root.querySelector("[data-cap-tablist]");
     const panel = root.querySelector("[data-cap-panel]");
@@ -238,11 +327,8 @@ import { data, tabLabels } from "./data";
 
     if (reduceMotion) {
       replacePanelContent(root, panel, item);
-      root.querySelectorAll("[data-cap-cat]").forEach((input) => {
-        if (input instanceof HTMLInputElement) {
-          input.checked = input.value === activeCategory;
-        }
-      });
+      syncCategoryRadios(root);
+      renderAccordion(root);
       return;
     }
 
@@ -251,11 +337,8 @@ import { data, tabLabels } from "./data";
 
     if (!hasPrior) {
       replacePanelContent(root, panel, item);
-      root.querySelectorAll("[data-cap-cat]").forEach((input) => {
-        if (input instanceof HTMLInputElement) {
-          input.checked = input.value === activeCategory;
-        }
-      });
+      syncCategoryRadios(root);
+      renderAccordion(root);
       return;
     }
 
@@ -269,11 +352,8 @@ import { data, tabLabels } from "./data";
       finished = true;
       motion.removeEventListener("transitionend", onEnd);
       replacePanelContent(root, panel, item);
-      root.querySelectorAll("[data-cap-cat]").forEach((input) => {
-        if (input instanceof HTMLInputElement) {
-          input.checked = input.value === activeCategory;
-        }
-      });
+      syncCategoryRadios(root);
+      renderAccordion(root);
     };
 
     /** @param {TransitionEvent} e */
@@ -307,8 +387,27 @@ import { data, tabLabels } from "./data";
         if (v !== "services" && v !== "useCases") return;
         activeCategory = v;
         activeTab = data[activeCategory][0].slug;
+        openItems.clear();
         render(root);
       });
+    });
+
+    root.addEventListener("click", (e) => {
+      const t = e.target;
+      if (!(t instanceof Element)) return;
+      const trigger = t.closest(".cap-accordion__trigger");
+      if (!trigger || !(trigger instanceof HTMLElement)) return;
+      const acc = root.querySelector("[data-cap-accordion]");
+      if (!acc || !acc.contains(trigger)) return;
+      const wrap = trigger.closest("[data-cap-acc-item]");
+      const slug = wrap?.getAttribute("data-slug");
+      if (!slug) return;
+      if (openItems.has(slug)) {
+        openItems.delete(slug);
+      } else {
+        openItems.add(slug);
+      }
+      renderAccordion(root);
     });
 
     const tablist = root.querySelector("[data-cap-tablist]");
@@ -661,6 +760,226 @@ import { data, tabLabels } from "./data";
   @media (prefers-reduced-motion: reduce) {
     .cap-seg__face {
       transition: none;
+    }
+  }
+
+  /*
+   * Mobile accordion: content is injected via innerHTML (no data-astro-cid).
+   * :global() required so these selectors match the real DOM.
+   */
+  :global(.cap-accordion) {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    border-top: 1px solid var(--line-subtle);
+  }
+
+  :global(.cap-accordion__item) {
+    box-sizing: border-box;
+    width: 100%;
+    border-bottom: 1px solid var(--line-subtle);
+  }
+
+  :global(.cap-accordion__trigger) {
+    box-sizing: border-box;
+    display: flex;
+    width: 100%;
+    min-height: 56px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0;
+    padding: 0 clamp(1rem, 4vw, 1.25rem);
+    font-family: inherit;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    text-align: left;
+    color: var(--text-primary);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+
+  :global(.cap-accordion__trigger:hover) {
+    transform: none;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  :global(.cap-accordion__trigger:focus-visible) {
+    outline: 2px solid var(--line-strong);
+    outline-offset: -2px;
+  }
+
+  :global(.cap-accordion__trigger-text) {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: left;
+  }
+
+  :global(.cap-accordion__chevron) {
+    flex-shrink: 0;
+    align-self: center;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-right: 2px solid var(--line-strong);
+    border-bottom: 2px solid var(--line-strong);
+    transform: rotate(45deg);
+    transform-origin: 50% 50%;
+    transition: transform 0.26s cubic-bezier(0.2, 0.9, 0.2, 1);
+  }
+
+  :global(.cap-accordion__item.is-open .cap-accordion__chevron) {
+    transform: rotate(-135deg);
+  }
+
+  :global(.cap-accordion__region) {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      max-height 0.28s cubic-bezier(0.2, 0.9, 0.2, 1),
+      opacity 0.24s ease;
+  }
+
+  :global(.cap-accordion__item.is-open .cap-accordion__region) {
+    max-height: min(240vh, 4000px);
+    opacity: 1;
+  }
+
+  :global(.cap-accordion__content) {
+    box-sizing: border-box;
+    overflow: hidden;
+    width: 100%;
+    padding: 0 clamp(1rem, 4vw, 1.25rem) 1rem;
+  }
+
+  /* Panel markup inside accordion (injected) — layout + no heavy card chrome */
+  :global(.cap-accordion .cap-panel) {
+    width: 100%;
+    min-width: 0;
+  }
+
+  :global(.cap-accordion .cap-panel--accordion .cap-panel-surface) {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  :global(.cap-accordion .cap-accordion-panel-inner) {
+    min-width: 0;
+  }
+
+  :global(.cap-accordion .cap-panel__layout) {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-stack-major);
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  :global(.cap-accordion .cap-panel__copy) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-stack-major);
+    min-width: 0;
+    flex: 1 1 0%;
+    max-width: none;
+  }
+
+  :global(.cap-accordion .cap-panel__copy > *) {
+    margin: 0;
+  }
+
+  :global(.cap-accordion .cap-panel__desc) {
+    max-width: min(var(--measure-cap-desc), 100%);
+    color: var(--text-secondary);
+  }
+
+  :global(.cap-accordion .cap-panel__title) {
+    color: var(--text-primary);
+  }
+
+  :global(.cap-accordion .cap-panel__bullet) {
+    color: var(--text-muted);
+  }
+
+  :global(.cap-accordion .cap-panel__bullets) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-list-gap-tight);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  :global(.cap-accordion .cap-panel__media) {
+    min-width: 0;
+    flex: 1 1 0%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  :global(.cap-accordion .cap-panel-media) {
+    width: 100%;
+    align-self: stretch;
+    border-radius: var(--radius-inset-soft);
+    overflow: hidden;
+    border: 1px solid var(--line-subtle);
+    background: color-mix(in srgb, var(--bg-primary) 93%, var(--text-primary) 7%);
+  }
+
+  :global(.cap-accordion .cap-panel__figure) {
+    margin: 0;
+    display: block;
+  }
+
+  :global(.cap-accordion .cap-panel__img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  @media (max-width: 767px) {
+    :global(.cap-accordion .cap-panel-media) {
+      margin-left: 0;
+      max-width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.cap-accordion__region) {
+      transition: none;
+    }
+
+    :global(.cap-accordion__chevron) {
+      transition: none;
+    }
+
+    :global(.cap-accordion__item:not(.is-open) .cap-accordion__region) {
+      max-height: 0;
+      opacity: 0;
+    }
+
+    :global(.cap-accordion__item.is-open .cap-accordion__region) {
+      max-height: none;
+      opacity: 1;
     }
   }
 

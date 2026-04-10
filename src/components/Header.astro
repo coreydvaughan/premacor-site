@@ -1,205 +1,280 @@
+---
+---
+
 <header class="header">
+  <!-- ———————————————————————————————————————————————————————————————
+       DESKTOP — unchanged layout (md and up)
+       ——————————————————————————————————————————————————————————————— -->
+  <div class="header-desktop hidden w-full md:flex">
+    <div class="header-inner container">
+      <a href="/" class="logo">
+        <img src="/images/general/premacor-logo.png" alt="Premacor" />
+      </a>
 
-  <div class="header-inner container">
+      <div class="header-spacer" aria-hidden="true"></div>
 
-    <a href="/" class="logo">
+      <nav class="nav" aria-label="Primary">
+        <a href="/capabilities">Capabilities</a>
+        <a href="/industries">Industries</a>
+        <a href="/about">About</a>
+      </nav>
 
-      <img src="/images/general/premacor-logo.png" alt="Premacor" />
-
-    </a>
-
-    <div class="header-spacer" aria-hidden="true"></div>
-
-    <nav class="nav">
-
-      <a href="/capabilities">Capabilities</a>
-
-      <a href="/industries">Industries</a>
-
-      <a href="/about">About</a>
-
-    </nav>
-
-
-
-    <a href="#" class="btn primary">Get In Touch</a>
-
+      <a href="#" class="btn primary">Get In Touch</a>
+    </div>
   </div>
 
+  <!-- ———————————————————————————————————————————————————————————————
+       MOBILE — logo left, menu toggle right, panel below (below md)
+       ——————————————————————————————————————————————————————————————— -->
+  <div class="header-mobile flex w-full flex-col md:hidden">
+    <div class="header-mobile-bar">
+      <a href="/" class="header-mobile-logo">
+        <img src="/images/general/premacor-logo.png" alt="Premacor" width="140" height="48" />
+      </a>
+
+      <button
+        type="button"
+        class="header-mobile-toggle"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="header-mobile-menu"
+        data-mobile-menu-toggle
+      >
+        <span class="header-mobile-toggle-icon" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M4 7h16M4 12h16M4 17h16"
+              stroke="currentColor"
+              stroke-width="1.75"
+              stroke-linecap="round"></path>
+          </svg>
+        </span>
+      </button>
+    </div>
+
+    <nav
+      id="header-mobile-menu"
+      class="header-mobile-menu"
+      aria-label="Primary"
+      data-mobile-menu
+      hidden
+    >
+      <a href="/capabilities">Capabilities</a>
+      <a href="/industries">Industries</a>
+      <a href="/about">About</a>
+      <a href="#" class="header-mobile-menu-cta btn primary">Get In Touch</a>
+    </nav>
+  </div>
 </header>
 
+<script>
+  (function () {
+    const toggle = document.querySelector("[data-mobile-menu-toggle]");
+    const menu = document.querySelector("[data-mobile-menu]");
+    if (!toggle || !menu) return;
 
+    let isOpen = false;
+
+    function setOpen(next) {
+      isOpen = next;
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      toggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+      menu.hidden = !isOpen;
+    }
+
+    toggle.addEventListener("click", () => {
+      setOpen(!isOpen);
+    });
+
+    menu.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        setOpen(false);
+      });
+    });
+  })();
+</script>
 
 <style>
-
   .header {
-
     position: absolute;
-
     top: 0;
-
     left: 0;
-
     width: 100%;
-
     z-index: 10;
-
-
-
     padding-top: clamp(1.5rem, 3vw, 2.5rem);
-
     padding-bottom: 20px;
-
   }
 
+  @media (max-width: 767px) {
+    .header {
+      padding-top: 0.75rem;
+      padding-bottom: 0;
+    }
+  }
 
-
-  .header-inner {
-
+  /* ——— Desktop ——— */
+  .header-desktop .header-inner {
     display: flex;
-
     align-items: center;
-
     justify-content: flex-start;
-
     height: 80px;
-
   }
 
   .header-spacer {
-
     flex: 1 1 auto;
-
     min-width: clamp(1.5rem, 4vw, 3rem);
-
   }
 
-  .header-inner.container {
-
+  .header-desktop .header-inner.container {
     width: 100%;
-
     max-width: min(1600px, calc(100vw - 1rem));
-
     margin-left: auto;
-
     margin-right: auto;
-
     padding-left: clamp(0.5rem, 1.25vw, 1.25rem);
-
     padding-right: clamp(0.5rem, 1.25vw, 1.25rem);
-
     box-sizing: border-box;
-
   }
 
-
-
-  .logo {
+  .header-desktop .logo {
     flex-shrink: 0;
     display: block;
     line-height: 0;
     transform: translateX(-44px);
   }
 
-  .logo img {
-
+  .header-desktop .logo img {
     height: 200px;
-
     width: auto;
-
     display: block;
-
   }
-
-
 
   .nav {
-
     display: flex;
-
     flex-shrink: 0;
-
     gap: clamp(1.5rem, 3vw, 3rem);
-
     margin-right: clamp(1.5rem, 3vw, 2.5rem);
-
   }
-
-
 
   .nav a {
-
     position: relative;
-
     display: inline-block;
-
     font-size: 0.95rem;
-
     color: var(--text-nav-muted);
-
     text-decoration: none;
-
     padding-bottom: 6px;
-
-    transition: color 0.2s ease, opacity 0.2s ease;
-
+    transition:
+      color 0.2s ease,
+      opacity 0.2s ease;
   }
-
-
 
   .nav a::after {
-
     content: "";
-
     position: absolute;
-
     left: 0;
-
     bottom: 0;
-
     width: 100%;
-
     height: 2px;
-
     background-color: var(--text-primary);
-
     transform: scaleX(0);
-
     transform-origin: left center;
-
     transition: transform 0.35s ease;
-
   }
-
-
 
   .nav a:hover {
-
     opacity: 1;
-
     color: var(--text-primary);
-
   }
 
-
-
   .nav a:hover::after {
-
     transform: scaleX(1);
-
   }
 
   .header .btn {
     flex-shrink: 0;
-
     margin-left: auto;
-
     padding: 8px 16px;
-
     font-size: 14px;
-
     line-height: 1.4;
   }
 
-</style>
+  /* ——— Mobile ——— */
+  .header-mobile-bar {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 3.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-bottom: 1px solid var(--line-subtle);
+  }
 
+  .header-mobile-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .header-mobile-toggle:focus-visible {
+    outline: 2px solid var(--line-strong);
+    outline-offset: 2px;
+  }
+
+  .header-mobile-logo {
+    display: block;
+    flex-shrink: 0;
+    line-height: 0;
+    min-width: 0;
+  }
+
+  .header-mobile-logo img {
+    height: 5rem;
+    width: auto;
+    display: block;
+    max-width: 100%;
+  }
+
+  .header-mobile-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem 1rem 1rem;
+    border-bottom: 1px solid var(--line-subtle);
+  }
+
+  .header-mobile-menu[hidden] {
+    display: none !important;
+  }
+
+  .header-mobile-menu a {
+    display: block;
+    padding: 0.65rem 0;
+    font-size: 0.95rem;
+    color: var(--text-nav-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .header-mobile-menu a:hover {
+    color: var(--text-primary);
+  }
+
+  .header-mobile-menu .header-mobile-menu-cta {
+    margin-top: 0.5rem;
+    text-align: center;
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+</style>
