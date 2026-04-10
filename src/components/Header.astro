@@ -258,14 +258,14 @@
     display: none !important;
   }
 
-  .header-mobile-menu a {
-    display: block;
-    padding: 0.65rem 0;
-    font-size: 0.95rem;
-    color: var(--text-nav-muted);
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
+ .header-mobile-menu a:not(.btn) {
+  display: block;
+  padding: 0.65rem 0;
+  font-size: 0.95rem;
+  color: var(--text-nav-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
 
   .header-mobile-menu a:hover {
     color: var(--text-primary);
