@@ -5,6 +5,13 @@
         PREMACOR
       </div>
 
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="/capabilities">Capabilities</a>
+        <a href="/industries">Industries</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+      </nav>
+
       <div class="footer-contact">
         <p>info@premacor.com</p>
         <p>Cebu, Philippines</p>
@@ -27,6 +34,22 @@
   .footer-logo {
     font-weight: var(--weight-semibold);
     letter-spacing: 0.05em;
+  }
+
+  .footer-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3) var(--space-5);
+  }
+
+  .footer-nav a {
+    font-size: var(--text-nav);
+    color: var(--text-nav-muted);
+    text-decoration: none;
+  }
+
+  .footer-nav a:hover {
+    color: var(--text-primary);
   }
 
   .footer-contact p {
